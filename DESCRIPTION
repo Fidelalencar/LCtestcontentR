@@ -2,6 +2,7 @@ Package: LCtestcontentR
 Type: Package
 Title: Functionalities and objects for content production to the website.
 Version: 0.1.0
+URL: https://github.com/Fidelalencar/LCtestcontentR
 Author: Who wrote it
 Maintainer: Fidel Alencar <parentedealencarpimentel@gmail.com>
 Description: More about what it does (maybe more than one line)
