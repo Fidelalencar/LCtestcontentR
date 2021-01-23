@@ -1,7 +1,15 @@
 Package: LCtestcontentR
 Type: Package
 Depends: R (>= 3.2.1)
-Imports: tidyverse, lexicon, tm
+Imports: tidyverse, 
+    lexicon, 
+    tm,
+    youtubecaption
+Suggests:
+    dplyr,
+    RSQLite,
+    stringr,
+    purrr
 Title: Functionalities and objects for content production to the website.
 Version: 0.1.0
 URL: https://github.com/Fidelalencar/LCtestcontentR
