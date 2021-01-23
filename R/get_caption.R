@@ -1,16 +1,17 @@
 
 
-if(require(youtubecaption) == F) install.packages("youtubecaption"); require(youtubecaption)
-if(require(tidyverse) == F) install.packages("tidyverse"); require(tidyverse)
-if(require(tm) == F) install.packages("tm"); require(tm)
-if(require(tokenizers) == F) install.packages("tokenizers"); require(tokenizers)
+
 
 legenda_sent_completa <- function(Insira_Link_do_Video_aqui, languag ="en-US") {
+  if(require(youtubecaption) == F) install.packages("youtubecaption"); require(youtubecaption)
+  if(require(tidyverse) == F) install.packages("tidyverse"); require(tidyverse)
+  if(require(tm) == F) install.packages("tm"); require(tm)
+  if(require(tokenizers) == F) install.packages("tokenizers"); require(tokenizers)
   #pegando a legenda
   Legendas <- get_caption(url = Insira_Link_do_Video_aqui,
                           language = languag,  # "en-GB", # ATENCAO PARA A ESCOLHA DA LEGENDA
                           savexl = FALSE, openxl = FALSE, path = getwd())
-  # Convertendo as legendas em data frame com as sentencas completas 
+  # Convertendo as legendas em data frame com as sentencas completas
   # Unindo legendas por sentenca.
   texto <- paste(Legendas$text, sep = " ", collapse = " ") # unindo as legendas em um unico texto
   texto <- str_replace_all(texto, "\n", " ")                 # recompondo os espaços
