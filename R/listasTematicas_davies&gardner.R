@@ -210,44 +210,51 @@ names(tematicas_df) <- c("words", "group")
 thems <- rbind(timeWords_df, emotionsWords_df, tematicas_df)
 
 #
-#
-# tentando expandir as palavras tematicas (thems) para todos os tokens variantes (a partir de hash_lemmas da biblioteca lexicon)
-if(require(lexicon) == F) install.packages("lexicon"); require(lexicon)
-data(hash_lemmas)
-#
-# PASSO IMPORTANTE:
-# hash_lemmas s? tem a lista das palavras modificadas. Ou seja, as palavras base s? est?o na segunda coluna (lemma), n?o na primeira (token)
-# aqui eu aumento a hash_lemmas adicionando as palavras base
-# hash_lemmas_unique <- unique(hash_lemmas$lemma)
-# base_words <- data.frame(cbind(token = hash_lemmas_unique, lemma = hash_lemmas_unique))
-# hash_lemmas <- rbind(hash_lemmas, base_words)
-# hash_lemmas <- hash_lemmas %>% arrange(lemma) # reordenando
-#
-# extraindo as colunas que nao interessam temporariamente
-# hash <- as.factor(hash_lemmas$lemma)
-# them <- as.factor(thems$words)
-#
-#
-# # limpando a area de trabalho
-# ls()
-# rm("emotionsWords_df", "emotionsWords_list", "tematicas_df", "tematicas_list", "timeWords_df",  "timeWords_list")
-#
-#
-# aqui eu encontro os indexes de 'hash' que tem palavras de 'them'
-# x <- hash %in% them
-# x1 <- which(x, arr.ind = TRUE)
-# h <- hash_lemmas[x1]  # limpando a base "hash_lemmas" para ter apenas as com palavras de 'them'
-# # aqui esta o resultado que eu queria. IMPORTANTE:
-# # 1. foi fundamental adicionar a 'hash_lemmas'  lista das palavras modificadas. Ou seja, as palavras "base" s? estavam na segunda coluna (lemma), n?o na primeira (token)
-# # 2. muitas palavras de them s?o "express?es", termos que acho que realmente n?o faziam sentido estar em hash_lemmas. Portanto, a lista 'them' cresce, mas com muitas palavras n?o presentes em hash_lemmas
-#
-#
-# # finalmente aumentamos a lista original de palavras tematicas adicionando as variantes
-# thems$lemma <- thems$words
-# thems$words <- NULL
-# thems_com_variantes <- h %>% full_join(thems, by = "lemma")
-#
-# thems_com_variantes <- thems_com_variantes %>% arrange(lemma)
+# CRIANDO UMA FUNCAO PARA RETORNAR A BASE DE DADOS COM TODAS AS PALAVRAS TEMATICAS (com palavra base e variantes)
+
+tematicasDGvariantes <- function() {
+  # tentando expandir as palavras tematicas (thems) para todos os tokens variantes (a partir de hash_lemmas da biblioteca lexicon)
+  if(require(lexicon) == F) install.packages("lexicon"); require(lexicon)
+  data(hash_lemmas)
+  #
+  # PASSO IMPORTANTE:
+  # hash_lemmas s? tem a lista das palavras modificadas. Ou seja, as palavras base s? est?o na segunda coluna (lemma), n?o na primeira (token)
+  # aqui eu aumento a hash_lemmas adicionando as palavras base
+  hash_lemmas_unique <- unique(hash_lemmas$lemma)
+  base_words <- data.frame(cbind(token = hash_lemmas_unique, lemma = hash_lemmas_unique))
+  hash_lemmas <- rbind(hash_lemmas, base_words)
+  hash_lemmas <- hash_lemmas %>% arrange(lemma) # reordenando
+
+  # extraindo as colunas que nao interessam temporariamente
+  hash <- as.factor(hash_lemmas$lemma)
+  them <- as.factor(thems$words)
+  #
+  #
+  # # limpando a area de trabalho
+  # ls()
+  # rm("emotionsWords_df", "emotionsWords_list", "tematicas_df", "tematicas_list", "timeWords_df",  "timeWords_list")
+  #
+  #
+  # aqui eu encontro os indexes de 'hash' que tem palavras de 'them'
+  x <- hash %in% them
+  h <- subset(hash_lemmas, subset = x)  # limpando a base "hash_lemmas" para ter apenas as com palavras de 'them'
+#### Inicialmente eu usava essas duas linhas ao invés da de cima, mas deu problema para criar o pacote.
+#  x1 <- which(x, arr.ind = TRUE)
+#  h <- hash_lemmas[x1]
+####
+  # # aqui esta o resultado que eu queria. IMPORTANTE:
+  # # 1. foi fundamental adicionar a 'hash_lemmas'  lista das palavras modificadas. Ou seja, as palavras "base" s? estavam na segunda coluna (lemma), n?o na primeira (token)
+  # # 2. muitas palavras de them s?o "express?es", termos que acho que realmente n?o faziam sentido estar em hash_lemmas. Portanto, a lista 'them' cresce, mas com muitas palavras n?o presentes em hash_lemmas
+  #
+  #
+  # finalmente aumentamos a lista original de palavras tematicas adicionando as variantes
+  thems$lemma <- thems$words
+  thems$words <- NULL
+  thems_com_variantes <- h %>% full_join(thems, by = "lemma")
+  #
+  thems_com_variantes <- thems_com_variantes %>% arrange(lemma)
+  return(thems_com_variantes)
+}
 #
 #
 #
