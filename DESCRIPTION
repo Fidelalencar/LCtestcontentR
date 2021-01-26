@@ -1,7 +1,8 @@
 Package: LCtestcontentR
 Type: Package
 Depends: R (>= 3.2.1)
-Imports: tidyverse, 
+Imports: 
+    tidyverse, 
     lexicon, 
     tm,
     youtubecaption
