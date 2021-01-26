@@ -209,9 +209,21 @@ names(tematicas_df) <- c("words", "group")
 # unindo tempo, emotions e as outras tematicas
 thems <- rbind(timeWords_df, emotionsWords_df, tematicas_df)
 
-#
-# CRIANDO UMA FUNCAO PARA RETORNAR A BASE DE DADOS COM TODAS AS PALAVRAS TEMATICAS (com palavra base e variantes)
 
+#' CRIANDO UMA FUNCAO PARA RETORNAR A BASE DE DADOS COM TODAS AS PALAVRAS TEMATICAS (com palavra base e variantes)
+#' tematicasDGvariantes()
+#' função sem parametro. retorna DF com as listas tematicas de Davies & Gardner.
+#' No entanto, elas está expandida, pois contem (1) uma coluna com os lemmas
+#' (lista original com valores repetidos para os tokens de mesmo lemma);
+#' (2) coluna de tokens (as tokens variantes dos lemmas foram obtidas
+#' com a base hash_lemmas do pacote lexicon)
+#' (3) coluna 'group' que agrupa as palavras por grupos temáticos
+#' (são eles: months, weekdays, seasons, intervals, dayparts, holidays, time_general,
+#' emotions_negative, emotions_neutral, emotions_positive, color, clothing,
+#' clothing_general, animals, bodyparts, family, food, food_general, material,
+#'  nationalities, professions, professions_general, government, military,
+#'  sports_general, sports_participants, sports, transportation_general,
+#'  transportation, weather_general, weather_nouns)
 tematicasDGvariantes <- function() {
   # tentando expandir as palavras tematicas (thems) para todos os tokens variantes (a partir de hash_lemmas da biblioteca lexicon)
   if(require(lexicon) == F) install.packages("lexicon"); require(lexicon)
@@ -220,9 +232,9 @@ tematicasDGvariantes <- function() {
   # PASSO IMPORTANTE:
   # hash_lemmas s? tem a lista das palavras modificadas. Ou seja, as palavras base s? est?o na segunda coluna (lemma), n?o na primeira (token)
   # aqui eu aumento a hash_lemmas adicionando as palavras base
-  hash_lemmas_unique <- unique(hash_lemmas$lemma)
-  base_words <- data.frame(cbind(token = hash_lemmas_unique, lemma = hash_lemmas_unique))
-  hash_lemmas <- rbind(hash_lemmas, base_words)
+  hash_lemmas_unique <- unique(hash_lemmas$lemma) # vetor de lemmas
+  base_words <- data.frame(cbind(token = hash_lemmas_unique, lemma = hash_lemmas_unique)) # duplicando o vetor de lemmas unicos em um data frame (para virar o lemma e sua "variante" identica)
+  hash_lemmas <- rbind(hash_lemmas, base_words) #aqui eu adiciono o vetor com lemma e variante identica a base original (hash_lemmas)
   hash_lemmas <- hash_lemmas %>% arrange(lemma) # reordenando
 
   # extraindo as colunas que nao interessam temporariamente
@@ -251,10 +263,20 @@ tematicasDGvariantes <- function() {
   thems$lemma <- thems$words
   thems$words <- NULL
   thems_com_variantes <- h %>% full_join(thems, by = "lemma")
-  #
+  i <- which(is.na(thems_com_variantes$token)) # identificando com index as linhas com valor NA
+  for (value in i) { # preenchendo os valores NA na coluna token com os valores da coluna lemma
+    thems_com_variantes$token[value] <- thems_com_variantes$lemma[value]
+  }
   thems_com_variantes <- thems_com_variantes %>% arrange(lemma)
+
   return(thems_com_variantes)
 }
+
+
+
+
+
+
 #
 #
 #

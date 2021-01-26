@@ -1,7 +1,11 @@
 
-
-
-
+#'legenda_sent_completa(x, y)
+#'
+#'A função retorna um DF com a legenda organizada em sentenças completas a cada linha.
+#'x é string com link para legenda; y é string indicando qual o idioma da legenda,
+#'o valor default é "en-US". Para entender quais os possiveis strings de 'y',
+#'ver o parametro language da função get_caption() do pacote "youtubecaption"
+#'
 legenda_sent_completa <- function(Insira_Link_do_Video_aqui, languag ="en-US") {
   if(require(youtubecaption) == F) install.packages("youtubecaption"); require(youtubecaption)
   if(require(tidyverse) == F) install.packages("tidyverse"); require(tidyverse)
