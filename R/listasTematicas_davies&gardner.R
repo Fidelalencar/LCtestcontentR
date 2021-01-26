@@ -37,7 +37,7 @@ names(timeWords_df) <- c("words", "group")
 #
 # rm(months,  weekdays, seasons, intervals, dayparts, holidays, time_general)
 #
-# # emotions ----
+# emotions ----
 emotions_negative <- c("sorry",  "afraid",  "angry",  "crazy",  "guilty",  "nervous",  "scared", "desperate", "worried",  "bitter",  "uncomfortable" ,
               "anxious" ,"lonely" , "reluctant" , "disappointed", "hostile" , "uncertain" , "upset" , "embarrassed" , "depressed"  ,"suspicious",
               "unhappy" ,"awkward" , "troubled" , "grim", "furious"  ,"confused"  ,"ashamed"  ,"useless" ,"frightened" , "shocked" , "miserable",
@@ -271,10 +271,6 @@ tematicasDGvariantes <- function() {
 
   return(thems_com_variantes)
 }
-
-
-
-
 
 
 #
