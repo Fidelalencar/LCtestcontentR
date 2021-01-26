@@ -29,85 +29,87 @@ opposite <- c('new', 'old', 'good', 'bad', 'big', 'little', 'large', 'small', 'y
 opposites <- cbind.data.frame(split(opposite, rep(1:2, times=length(opposite)/2)), stringsAsFactors=F)
 names(opposites) <- c("word", "opposite")
 
-x <- data.frame(cbind(opposites$opposite, opposites$word))
-names(x) <- c("word", "opposite")
+w <- data.frame(cbind(opposites$opposite, opposites$word))
+names(w) <- c("word", "opposite")
 
-opposites <- data.frame(rbind(opposites, x)) # lista completa (com os valores invertidos)
+opposites <- data.frame(rbind(opposites, w)) # lista completa (com os valores invertidos)
+
+
 #
 # rm(x, opposite)
 #
 #
-# # voc spoken_english ----
-#
-# spoken_english <- c('lot', 'news', 'thanks', 'vote', 'bit', 'troop', 'jury', 'murder', 'poll', 'witness',
-#                     'terrorism', 'think', 'know', 'talk', 'mean', 'happen', 'thank', 'join', 'guess', 'vote',
-#                     'testify', 'convict', 'excuse', 'tune', 'campaign', 'rape', 'bomb', 'prosecute',
-#                     'jail', 'indict', 'veto', 'interesting', 'Iraqi', 'correct', 'guilty', 'OK', 'rigid',
-#                     'terrific', 'unbelievable', 'partisan', 'undercover', 'convicted', 'prolife', 'teenage',
-#                     'antiwar', 'well', 'very', 'here', 'really', 'right', 'today', 'all', 'actually', 'OK',
-#                     'tonight', 'certainly', 'absolutely', 'pretty', 'ahead', 'obviously', 'basically', 'tomorrow', 'yesterday', 'like', 'frankly')
-#
-#
-#
-# # voc fiction ----
-#
-# fiction <- c('hand', 'eye', 'head', 'room', 'door', 'face', 'mother', 'father', 'voice', 'girl', 'boy', 'arm', 'hair', 'light',
-# 'window', 'bed', 'wall', 'floor', 'finger', 'shoulder', 'look', 'sit', 'stand', 'walk', 'pull', 'wait', 'smile', 'stare', 'shake',
-# 'laugh', 'close', 'nod', 'wonder', 'hang', 'lay', 'lean', 'notice', 'step', 'sleep', 'touch', 'dead', 'dark', 'sorry', 'empty',
-# 'tall', 'quiet', 'strange', 'thin', 'alone', 'thick', 'silent', 'gray', 'brown', 'yellow', 'tired', 'pale', 'asleep', 'glad',
-# 'stupid', 'wet', 'away', 'maybe', 'suddenly', 'slowly', 'inside', 'please', 'okay', 'anyway', 'outside', 'somewhere', 'straight',
-# 'barely', 'closer', 'quietly', 'gently', 'softly', 'besides', 'upstairs', 'o\'clock', 'silently')
-#
-#
-#
-# # voc popular magazines ----
-# voc_popular_magazines <- c('photograph', 'artist', 'cup', 'painting', 'weight', 'heat', 'garden', 'inch', 'fat', 'sugar',
-#                        'salt', 'trail', 'bike', 'pepper', 'fruit', 'vegetable', 'muscle', 'teaspoon', 'diet', 'tablespoon',
-#                        'paint', 'stir', 'bake', 'install', 'chop', 'hunt', 'hike', 'drain', 'boost', 'blend', 'slice', 'sprinkle',
-#                        'ski', 'boast', 'simmer', 'coat', 'cruise', 'whisk', 'rotate', 'rinse', 'digital', 'solar', 'medium', 'organic',
-#                        'olive', 'immune', 'chopped', 'tender', 'rear', 'dried', 'soy', 'optional', 'excess', 'inexpensive', 'planetary',
-#                        'dietary', 'decorative', 'saturated', 'handy', 'nutritional', 'evenly', 'finely', 'thinly', 'outdoors', 'clockwise',
-#                        'coarsely', 'lengthwise', 'solo', 'opposite', 'ultra', 'uphill', 'chemically', 'diagonally', 'snugly', 'seamlessly',
-#                        'electrically', 'downwind', 'counterclockwise', 'nutritionally', 'refreshingly')
-#
-#
-#
-#
-# # voc_newspapers ----
-#
-# voc_newspapers <- c('game', 'team', 'season', 'player', 'official', 'county', 'director', 'executive', 'district', 'coach', 'league', 'manager',
-#                     'editor', 'restaurant', 'sales', 'resident', 'fan', 'baseball', 'football', 'chairman', 'win', 'coach', 'score', 'retire', 'pitch', 'host',
-#                     'average', 'oversee', 'staff', 'total', 'commute', 'email', 'bat', 'rebound', 'single', 'preheat', 'lease', 'saut?', 'renovate', 'refrigerate',
-#                     'chief', 'Olympic', 'defensive', 'downtown', 'offensive', 'longtime', 'retail', 'retired', 'consecutive', 'associated', 'allstar', 'pro',
-#                     'nonprofit', 'select', 'veteran', 'head', 'managing', 'winning', 'saturated', 'statewide', 'PM', 'AM', 'downtown', 'defensively', 'offensively',
-#                     'nightly', 'upfront', 'athletically')
-#
-#
-#
-#
-# # voc_acad_journals ----
-#
-# voc_acad_journals <- c('student', 'study', 'teacher', 'education', 'level', 'research', 'community', 'result', 'process', 'development',
-# 'use', 'policy', 'data', 'effect', 'experience', 'activity', 'model', 'analysis', 'behavior', 'difference', 'provide', 'suggest',
-# 'develop', 'require', 'base', 'indicate', 'describe', 'identify', 'represent', 'increase', 'present', 'note', 'determine', 'occur',
-# 'relate', 'establish', 'examine', 'state', 'compare', 'reflect', ' social', 'political', 'economic', 'significant', 'cultural', 'environmental',
-# 'physical', 'specific', 'similar', 'individual', 'various', 'religious', 'positive', 'traditional', 'academic', 'African', 'sexual',
-# 'particular', 'present', 'effective', 'however', 'thus', 'for example', 'therefore', 'eg', 'significantly', 'generally', 'highly',
-# 'in addition', 'relatively', 'ie', 'moreover', 'frequently', 'specifically', 'primarily', 'approximately', 'furthermore', 'similarly', 'previously', 'effectively')
-#
-#
-#
-# # new_words ----
-# new_words <- c('email', 'terrorism', 'terrorist', 'affiliation', 'adolescent', 'homeland', 'website', 'Sunni', 'wireless', 'prep', 'Taliban',
-# 'insurgent', 'globalization', 'SUV', 'RPG', 'anthrax', 'steroid', 'genome', 'blog', 'detainee', 'militant', 'ethanol', 'insurgency', 'yoga',
-# 'recount', 'cleric', 'coping', 'tsunami', 'cellphone', 'host', 'click', 'email', 'download', 'preheat', 'bully', 'makeover', 'freak', 'partner',
-# 'mentor', 'morph', 'vaccinate', 'restart', 'reconnect', 'saut?', 'hijack', 'cowrite', 'ditch', 'reference', 'swipe', 'outsource', 'transition',
-# 'upload', 'refuel', 'profile', 'encrypt', 'workout', 'prep', 'splurge', 'snack', 'online', 'terrorist', 'Afghan', 'Taliban', 'Shiite', 'Pakistani',
-# 'samesex', 'sectarian', 'upscale', 'embryonic', 'Islamist', 'iconic', 'faithbased', 'broadband', 'handheld', 'pandemic', 'webbased', 'nonstick',
-# 'steroid', 'insurgent', 'avian', 'dotcom', 'Chechen', 'oldschool', 'clueless', 'performanceenhancing', 'highstakes', 'AlQaida', 'stcentury', 'gated',
-# 'online', 'famously', 'postoperatively', 'offline', 'wirelessly', 'healthfully', 'preemptively', 'intraoperatively', 'triply', 'dayahead', 'forensically',
-# 'inferiorly', 'preemptively', 'multiculturally', 'counterintuitively', 'synchronically')
-#
+# voc spoken_english ----
+
+spoken_english <- c('lot', 'news', 'thanks', 'vote', 'bit', 'troop', 'jury', 'murder', 'poll', 'witness',
+                    'terrorism', 'think', 'know', 'talk', 'mean', 'happen', 'thank', 'join', 'guess', 'vote',
+                    'testify', 'convict', 'excuse', 'tune', 'campaign', 'rape', 'bomb', 'prosecute',
+                    'jail', 'indict', 'veto', 'interesting', 'Iraqi', 'correct', 'guilty', 'OK', 'rigid',
+                    'terrific', 'unbelievable', 'partisan', 'undercover', 'convicted', 'prolife', 'teenage',
+                    'antiwar', 'well', 'very', 'here', 'really', 'right', 'today', 'all', 'actually', 'OK',
+                    'tonight', 'certainly', 'absolutely', 'pretty', 'ahead', 'obviously', 'basically', 'tomorrow', 'yesterday', 'like', 'frankly')
+
+
+
+# voc fiction ----
+
+fiction <- c('hand', 'eye', 'head', 'room', 'door', 'face', 'mother', 'father', 'voice', 'girl', 'boy', 'arm', 'hair', 'light',
+'window', 'bed', 'wall', 'floor', 'finger', 'shoulder', 'look', 'sit', 'stand', 'walk', 'pull', 'wait', 'smile', 'stare', 'shake',
+'laugh', 'close', 'nod', 'wonder', 'hang', 'lay', 'lean', 'notice', 'step', 'sleep', 'touch', 'dead', 'dark', 'sorry', 'empty',
+'tall', 'quiet', 'strange', 'thin', 'alone', 'thick', 'silent', 'gray', 'brown', 'yellow', 'tired', 'pale', 'asleep', 'glad',
+'stupid', 'wet', 'away', 'maybe', 'suddenly', 'slowly', 'inside', 'please', 'okay', 'anyway', 'outside', 'somewhere', 'straight',
+'barely', 'closer', 'quietly', 'gently', 'softly', 'besides', 'upstairs', 'o\'clock', 'silently')
+
+
+
+# voc popular magazines ----
+voc_popular_magazines <- c('photograph', 'artist', 'cup', 'painting', 'weight', 'heat', 'garden', 'inch', 'fat', 'sugar',
+                       'salt', 'trail', 'bike', 'pepper', 'fruit', 'vegetable', 'muscle', 'teaspoon', 'diet', 'tablespoon',
+                       'paint', 'stir', 'bake', 'install', 'chop', 'hunt', 'hike', 'drain', 'boost', 'blend', 'slice', 'sprinkle',
+                       'ski', 'boast', 'simmer', 'coat', 'cruise', 'whisk', 'rotate', 'rinse', 'digital', 'solar', 'medium', 'organic',
+                       'olive', 'immune', 'chopped', 'tender', 'rear', 'dried', 'soy', 'optional', 'excess', 'inexpensive', 'planetary',
+                       'dietary', 'decorative', 'saturated', 'handy', 'nutritional', 'evenly', 'finely', 'thinly', 'outdoors', 'clockwise',
+                       'coarsely', 'lengthwise', 'solo', 'opposite', 'ultra', 'uphill', 'chemically', 'diagonally', 'snugly', 'seamlessly',
+                       'electrically', 'downwind', 'counterclockwise', 'nutritionally', 'refreshingly')
+
+
+
+
+# voc_newspapers ----
+
+voc_newspapers <- c('game', 'team', 'season', 'player', 'official', 'county', 'director', 'executive', 'district', 'coach', 'league', 'manager',
+                    'editor', 'restaurant', 'sales', 'resident', 'fan', 'baseball', 'football', 'chairman', 'win', 'coach', 'score', 'retire', 'pitch', 'host',
+                    'average', 'oversee', 'staff', 'total', 'commute', 'email', 'bat', 'rebound', 'single', 'preheat', 'lease', 'saut?', 'renovate', 'refrigerate',
+                    'chief', 'Olympic', 'defensive', 'downtown', 'offensive', 'longtime', 'retail', 'retired', 'consecutive', 'associated', 'allstar', 'pro',
+                    'nonprofit', 'select', 'veteran', 'head', 'managing', 'winning', 'saturated', 'statewide', 'PM', 'AM', 'downtown', 'defensively', 'offensively',
+                    'nightly', 'upfront', 'athletically')
+
+
+
+
+# voc_acad_journals ----
+
+voc_acad_journals <- c('student', 'study', 'teacher', 'education', 'level', 'research', 'community', 'result', 'process', 'development',
+'use', 'policy', 'data', 'effect', 'experience', 'activity', 'model', 'analysis', 'behavior', 'difference', 'provide', 'suggest',
+'develop', 'require', 'base', 'indicate', 'describe', 'identify', 'represent', 'increase', 'present', 'note', 'determine', 'occur',
+'relate', 'establish', 'examine', 'state', 'compare', 'reflect', ' social', 'political', 'economic', 'significant', 'cultural', 'environmental',
+'physical', 'specific', 'similar', 'individual', 'various', 'religious', 'positive', 'traditional', 'academic', 'African', 'sexual',
+'particular', 'present', 'effective', 'however', 'thus', 'for example', 'therefore', 'eg', 'significantly', 'generally', 'highly',
+'in addition', 'relatively', 'ie', 'moreover', 'frequently', 'specifically', 'primarily', 'approximately', 'furthermore', 'similarly', 'previously', 'effectively')
+
+
+
+# new_words ----
+new_words <- c('email', 'terrorism', 'terrorist', 'affiliation', 'adolescent', 'homeland', 'website', 'Sunni', 'wireless', 'prep', 'Taliban',
+'insurgent', 'globalization', 'SUV', 'RPG', 'anthrax', 'steroid', 'genome', 'blog', 'detainee', 'militant', 'ethanol', 'insurgency', 'yoga',
+'recount', 'cleric', 'coping', 'tsunami', 'cellphone', 'host', 'click', 'email', 'download', 'preheat', 'bully', 'makeover', 'freak', 'partner',
+'mentor', 'morph', 'vaccinate', 'restart', 'reconnect', 'saut?', 'hijack', 'cowrite', 'ditch', 'reference', 'swipe', 'outsource', 'transition',
+'upload', 'refuel', 'profile', 'encrypt', 'workout', 'prep', 'splurge', 'snack', 'online', 'terrorist', 'Afghan', 'Taliban', 'Shiite', 'Pakistani',
+'samesex', 'sectarian', 'upscale', 'embryonic', 'Islamist', 'iconic', 'faithbased', 'broadband', 'handheld', 'pandemic', 'webbased', 'nonstick',
+'steroid', 'insurgent', 'avian', 'dotcom', 'Chechen', 'oldschool', 'clueless', 'performanceenhancing', 'highstakes', 'AlQaida', 'stcentury', 'gated',
+'online', 'famously', 'postoperatively', 'offline', 'wirelessly', 'healthfully', 'preemptively', 'intraoperatively', 'triply', 'dayahead', 'forensically',
+'inferiorly', 'preemptively', 'multiculturally', 'counterintuitively', 'synchronically')
+
 #
 #
 #
