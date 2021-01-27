@@ -137,9 +137,10 @@ Dados_basicos_legenda <- function(Insira_Link_do_Video_aqui, language ="en") {
 #' o valor default deveria ser "en-US", mas não consegui fazer funcionar.
 #' Para entender quais os possiveis strings do vetor 'y', ver o parametro
 #' language da função get_caption() do pacote "youtubecaption".
-#' ATENÇÃO: tentei adicionar no segundo parametro, a possibilidade de inserir uma lista de vetores com os idiomas das legendas
-#' para ser levado em consideração (em paralelo) com o primeiro parametro.
-#' Aparentemente funcionaou, no entanto, agora é preciso sempre inserir esse vetor.
+#' ATENÇÃO: tentei adicionar no segundo parametro, a possibilidade de inserir
+#' uma lista de vetores com os idiomas das legendas para ser levado em consideração
+#' (em paralelo) com o primeiro parametro.
+#' Aparentemente funcionou, no entanto, agora é preciso sempre inserir esse vetor.
 #' Não consegui fazer funcionar o valor default.
 Dados_basicos_legenda_vetor <- function(Insira_vetor_de_Links_aqui, vlanguage) {
   if(require(purrr) == F) install.packages("purrr"); require(purrr)
