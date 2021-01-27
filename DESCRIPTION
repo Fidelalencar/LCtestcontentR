@@ -20,3 +20,4 @@ Description: It's a package that provide basic functions of text analysis to the
 License: MIT
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 7.1.1

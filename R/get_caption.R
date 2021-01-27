@@ -2,7 +2,10 @@
 #'legenda_sent_completa(x, y)
 #'
 #'A função retorna um DF com a legenda organizada em sentenças completas a cada linha.
-#'x é string com link para legenda; y é string indicando qual o idioma da legenda,
+#'
+#'@param x é string com link para legenda;
+#'
+#'@param y é string indicando qual o idioma da legenda,
 #'o valor default é "en-US". Para entender quais os possiveis strings de 'y',
 #'ver o parametro language da função get_caption() do pacote "youtubecaption"
 #'

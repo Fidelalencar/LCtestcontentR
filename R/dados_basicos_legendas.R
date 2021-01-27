@@ -18,6 +18,13 @@
 # CAPTURA DE LEGENDAS do YouTube: youtubecaption E analise básica do que é falado ----
 
 ##### CRIANDO A FUNCAO ----
+#' Dados_basicos_legenda(x, y)
+#'
+#' A funçaõ retorna dados básicos gerais sobre o texto das legendas.
+#' @param x é string com link para video do youtube.
+#' @param y é um string indicando qual o idioma da legenda, o valor
+#' default é "en-US". Para entender quais os possiveis strings de 'y', ver o
+#' parametro language da função get_caption() do pacote "youtubecaption"
 Dados_basicos_legenda <- function(Insira_Link_do_Video_aqui, language ="en-US") {
 
   # Captura da legenda:
@@ -119,8 +126,19 @@ Dados_basicos_legenda <- function(Insira_Link_do_Video_aqui, language ="en-US") 
 #   "https://www.youtube.com/watch?v=xw2OEKAHIhM")
 
 
-if(require(purrr) == F) install.packages("purrr"); require(purrr)
+
+#' Dados_basicos_legenda_vetor(x,y)
+#' A funçaõ retorna  um data.frame com dados básicos gerais sobre o texto
+#' das legendas.
+#' @param x é vetor de strings com links para video do youtube.
+#' @param y é um string indicando qual o idioma da legenda, o valor default é
+#' "en-US". Para entender quais os possiveis strings de 'y', ver o parametro
+#' language da função get_caption() do pacote "youtubecaption".
+#' ATENÇÃO: não foi construída uma forma de indicar a lingua de cada legenda.
+#' Portanto, é necessário que todos os links de videos adicionados tenham a
+#' legenda desejada no mesmo idioma.
 Dados_basicos_legenda_vetor <- function(Insira_vetor_de_Links_aqui) {
+  if(require(purrr) == F) install.packages("purrr"); require(purrr)
   tabela <- as.data.frame(  # essas linhas convertem a lista em data.frame
     matrix(unlist(
       map(Insira_vetor_de_Links_aqui, Dados_basicos_legenda)),
