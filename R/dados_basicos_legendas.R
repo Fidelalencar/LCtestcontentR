@@ -24,9 +24,9 @@
 #' A funçaõ retorna dados básicos gerais sobre o texto das legendas.
 #' @param x é string com link para video do youtube.
 #' @param y é um string indicando qual o idioma da legenda, o valor
-#' default é "en-US". Para entender quais os possiveis strings de 'y', ver o
+#' default é "en". Para entender quais os possiveis strings de 'y', ver o
 #' parametro language da função get_caption() do pacote "youtubecaption"
-Dados_basicos_legenda <- function(Insira_Link_do_Video_aqui, language ="en-US") {
+Dados_basicos_legenda <- function(Insira_Link_do_Video_aqui, language ="en") {
 
   # Captura da legenda:
   if(require(youtubecaption) == F) install.packages("youtubecaption"); require(youtubecaption)
@@ -140,7 +140,7 @@ Dados_basicos_legenda <- function(Insira_Link_do_Video_aqui, language ="en-US") 
 #' ATENÇÃO: tentei adicionar no segundo parametro, a possibilidade de inserir uma lista de vetores com os idiomas das legendas
 #' para ser levado em consideração (em paralelo) com o primeiro parametro.
 #' Aparentemente funcionaou, no entanto, agora é preciso sempre inserir esse vetor.
-#' Não consegui fazer funcionar o default = "en-US".
+#' Não consegui fazer funcionar o valor default.
 Dados_basicos_legenda_vetor <- function(Insira_vetor_de_Links_aqui, vlanguage) {
   if(require(purrr) == F) install.packages("purrr"); require(purrr)
   tabela <- as.data.frame(  # essas linhas convertem a lista em data.frame

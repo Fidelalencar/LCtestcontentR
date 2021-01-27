@@ -6,10 +6,10 @@
 #'@param x é string com link para legenda;
 #'
 #'@param y é string indicando qual o idioma da legenda,
-#'o valor default é "en-US". Para entender quais os possiveis strings de 'y',
+#'o valor default é "en". Para entender quais os possiveis strings de 'y',
 #'ver o parametro language da função get_caption() do pacote "youtubecaption"
 #'
-legenda_sent_completa <- function(Insira_Link_do_Video_aqui, languag ="en-US") {
+legenda_sent_completa <- function(Insira_Link_do_Video_aqui, languag ="en") {
   if(require(youtubecaption) == F) install.packages("youtubecaption"); require(youtubecaption)
   if(require(tidyverse) == F) install.packages("tidyverse"); require(tidyverse)
   if(require(tm) == F) install.packages("tm"); require(tm)
