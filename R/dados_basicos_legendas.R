@@ -141,7 +141,7 @@ Dados_basicos_legenda <- function(Insira_Link_do_Video_aqui, language ="en-US") 
 #' para ser levado em consideração (em paralelo) com o primeiro parametro.
 #' Aparentemente funcionaou, no entanto, agora é preciso sempre inserir esse vetor.
 #' Não consegui fazer funcionar o default = "en-US".
-Dados_basicos_legenda_vetor <- function(Insira_vetor_de_Links_aqui, vlanguage ="en-US") {
+Dados_basicos_legenda_vetor <- function(Insira_vetor_de_Links_aqui, vlanguage) {
   if(require(purrr) == F) install.packages("purrr"); require(purrr)
   tabela <- as.data.frame(  # essas linhas convertem a lista em data.frame
     matrix(unlist(
