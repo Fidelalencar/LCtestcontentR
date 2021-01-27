@@ -4,17 +4,19 @@
 \alias{Dados_basicos_legenda_vetor}
 \title{Dados_basicos_legenda_vetor(x,y)}
 \usage{
-Dados_basicos_legenda_vetor(Insira_vetor_de_Links_aqui)
+Dados_basicos_legenda_vetor(Insira_vetor_de_Links_aqui, vlanguage = "en-US")
 }
 \arguments{
 \item{x}{é vetor de strings com links para video do youtube.}
 
-\item{y}{é um string indicando qual o idioma da legenda, o valor default é
-"en-US". Para entender quais os possiveis strings de 'y', ver o parametro
+\item{y}{é um vetor de strings indicando quais os idiomas das legendas,
+o valor default deveria ser "en-US", mas não consegui fazer funcionar.
+Para entender quais os possiveis strings do vetor 'y', ver o parametro
 language da função get_caption() do pacote "youtubecaption".
-ATENÇÃO: não foi construída uma forma de indicar a lingua de cada legenda.
-Portanto, é necessário que todos os links de videos adicionados tenham a
-legenda desejada no mesmo idioma.}
+ATENÇÃO: tentei adicionar no segundo parametro, a possibilidade de inserir uma lista de vetores com os idiomas das legendas
+para ser levado em consideração (em paralelo) com o primeiro parametro.
+Aparentemente funcionaou, no entanto, agora é preciso sempre inserir esse vetor.
+Não consegui fazer funcionar o default = "en-US".}
 }
 \description{
 A funçaõ retorna  um data.frame com dados básicos gerais sobre o texto
