@@ -18,6 +18,7 @@
 # CAPTURA DE LEGENDAS do YouTube: youtubecaption E analise básica do que é falado ----
 
 ##### CRIANDO A FUNCAO ----
+
 #' Dados_basicos_legenda(x, y)
 #'
 #' A funçaõ retorna dados básicos gerais sobre o texto das legendas.
@@ -128,6 +129,7 @@ Dados_basicos_legenda <- function(Insira_Link_do_Video_aqui, language ="en-US") 
 
 
 #' Dados_basicos_legenda_vetor(x,y)
+#'
 #' A funçaõ retorna  um data.frame com dados básicos gerais sobre o texto
 #' das legendas.
 #' @param x é vetor de strings com links para video do youtube.
