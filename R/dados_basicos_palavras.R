@@ -16,14 +16,14 @@ if(require(stringr) == F) install.packages("stringr"); require(stringr)
 #' função que retorna um vetor com as palavras da legenda.
 #'
 #' @param Insira_Link_do_Video_aqui é o string do link do video do youtube
-#' @param languag é um string indicando qual o idioma da legenda, o valor
+#' @param language é um string indicando qual o idioma da legenda, o valor
 #' default é "en". Para entender quais os possiveis strings de 'y', ver o
 #' parametro language da função get_caption() do pacote "youtubecaption"
 #' @param removestopwords é lógico, default=T, remove as stop words (pacote tm)
 #' @param stemm é lógico, default=F, transforma as palavras em stemms (pacote tm)
 #' @param unicas é lógico, default=T, retorna o vetor sem palavras repetidas
 palavras_legenda <- function(Insira_Link_do_Video_aqui,
-                             languag="en",
+                             language="en",
                              removestopwords=TRUE,
                              stemm=FALSE,
                              unicas=TRUE) {
@@ -31,12 +31,13 @@ palavras_legenda <- function(Insira_Link_do_Video_aqui,
 
   Legendas <- get_caption(url = Insira_Link_do_Video_aqui,
                           # Insira_Link_do_Video_aqui <- "https://www.youtube.com/watch?v=R7YmA_-8zZo"
-                          language = languag, # ATENCAO PARA A ESCOLHA DA LEGENDA
+                          language = language,  # ATENCAO PARA A ESCOLHA DA LEGENDA
                           savexl = FALSE, openxl = FALSE, path = getwd())
 
   ## B2. limpando, stemming e convertendo as legendas para o formato adequado
   Legendas_string <- pull(Legendas, text) # converte o tibble em vetor
-  Legendas_corpus_limpo <- Corpus(VectorSource(Legendas_string)) # converte os vetores em corpus
+  Legendas_corpus <- Corpus(VectorSource(Legendas_string)) # converte os vetores em corpus
+  Legendas_corpus_limpo <- tm_map(Legendas_corpus, tolower)
   if (removestopwords == TRUE) {
     Legendas_corpus_limpo <- tm_map(Legendas_corpus_limpo, removeWords, stopwords("english")) # Limpando as stopwords
   }
@@ -162,7 +163,7 @@ palavras_legenda <- function(Insira_Link_do_Video_aqui,
 # matches_na_sentenca <- function(Insira_sentenca) {
 #   Insira_sentenca <- str_to_lower(Insira_sentenca) # Inserindo e limpando sentenÃ§a
 #   vezes = length(lista) # "the" "be"  "and" "of"  "a"
-#   vetor <- rep(NA, vezes) # Ã boa prÃ¡tica nÃ£o criar objetos que expandem o tamanho. Crie objeto fixo e use indexaÃ§Ã£o para preenchÃª-lo.
+#   vetor <- rep(NA, vezes) # E' boa pra'tica nao criar objetos que expandem o tamanho. Crie objeto fixo e use indexacao para preenche-lo.
 #   i = 1
 #   for(it in 1:vezes) {
 #     palavra <- paste("(^| )", lista[it], "( |$)", sep = "", collapse = "")
@@ -243,6 +244,34 @@ palavras_legenda <- function(Insira_Link_do_Video_aqui,
 
 
 
+
+##### RETORNANDO PALAVRAS MAIS FREQUENTES
+
+palavras_frequentes <- function(Insira_Link_do_Video_aqui,
+                                language ="en",
+                                stemm=FALSE) {
+
+  vector <- palavras_legenda(Insira_Link_do_Video_aqui, languag="en",
+                             removestopwords=TRUE,
+                             stemm=stemm,
+                             unicas=FALSE)
+
+  df <- data.frame(table(vector))
+
+  df_M1 <- df %>% filter(df$Freq > 1) # selecionando os termos q aparecem mais de 1 vez
+
+  ordem <- order(df_M1$Freq, decreasing = TRUE) # obter a ordenacao do volume
+
+  levels <- df_M1$vector[ordem]  # criar os n?veis ordenados
+  df_M1$vector <- factor(df_M1$vector, levels=levels, ordered=TRUE) # criar um factor com n?veis ordenados
+
+  graf <- ggplot(data = df_M1) + aes(x = df_M1$vector, y = df_M1$Freq) + #para add cores: "fill = word" como argumento em aes()
+    geom_bar(stat = "identity") +   labs(x = "Palavras", y = 'Frequencia') +
+    guides(fill=FALSE) +
+    coord_flip()
+
+  return(graf)
+}
 
 
 

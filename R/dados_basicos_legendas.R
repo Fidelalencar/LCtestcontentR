@@ -13,7 +13,9 @@
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
 
-
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
 
 # CAPTURA DE LEGENDAS do YouTube: youtubecaption E analise básica do que é falado ----
 
@@ -102,6 +104,7 @@ Dados_basicos_legenda <- function(Insira_Link_do_Video_aqui, language ="en") {
 
 
 
+
 ##### USANDO A FUNCAO REPETIDAMENTE PARA GERAR TABELA COM DADOS DE VARIOS VIDEOS!!! ----
 
 # videos <- c(
@@ -155,3 +158,5 @@ Dados_basicos_legenda_vetor <- function(Insira_vetor_de_Links_aqui, vlanguage) {
                         "Words per sec")
   return(tabela)
 }
+
+
