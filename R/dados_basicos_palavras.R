@@ -249,7 +249,8 @@ palavras_legenda <- function(Insira_Link_do_Video_aqui,
 
 palavras_frequentes <- function(Insira_Link_do_Video_aqui,
                                 language ="en",
-                                stemm=FALSE) {
+                                stemm=FALSE,
+                                qntt=40) {
 
   vector <- palavras_legenda(Insira_Link_do_Video_aqui, languag="en",
                              removestopwords=TRUE,
@@ -260,13 +261,16 @@ palavras_frequentes <- function(Insira_Link_do_Video_aqui,
 
   df_M1 <- df %>% filter(df$Freq > 1) # selecionando os termos q aparecem mais de 1 vez
 
-  ordem <- order(df_M1$Freq, decreasing = TRUE) # obter a ordenacao do volume
+  ordem <- order(df_M1$Freq, decreasing = FALSE) # obter a ordenacao do volume
 
   levels <- df_M1$vector[ordem]  # criar os n?veis ordenados
   df_M1$vector <- factor(df_M1$vector, levels=levels, ordered=TRUE) # criar um factor com n?veis ordenados
 
+  df_M1 <- df_M1[order(df_M1$Freq, decreasing = TRUE),]
+  df_M1 <- df_M1[1:qntt,]
+
   graf <- ggplot(data = df_M1) + aes(x = df_M1$vector, y = df_M1$Freq) + #para add cores: "fill = word" como argumento em aes()
-    geom_bar(stat = "identity") +   labs(x = "Palavras", y = 'Frequencia') +
+    geom_bar(stat = "identity") + labs(x = "Palavras", y = 'Frequencia') +
     guides(fill=FALSE) +
     coord_flip()
 
@@ -275,8 +279,39 @@ palavras_frequentes <- function(Insira_Link_do_Video_aqui,
 
 
 
+#### CRIANDO NOSSO LEMMATIZADOR
+# fazendo uma funçaõ que faz o lemmatization usando humspell mas adaptando para
+# repetir as palavras sem lemma no dict deles.
 
+if(require(hunspell) == F) install.packages("hunspell"); require(hunspell)
 
+# Insira_Link_do_Video_aqui = "https://www.youtube.com/watch?v=2W85Dwxx218"
+# words_v <- palavras_legenda(Insira_Link_do_Video_aqui,
+#                              language="en",
+#                              removestopwords=FALSE,
+#                              stemm=FALSE,
+#                              unicas=FALSE)
+
+our_lemmatizer <- function(words, logico=FALSE) {
+  words_lemma <- hunspell_stem(words)
+
+  # aqui eu substituo os elementos vazios (length=0, pois não encontrou lemma) pela palavra referente do texto
+  lemma <- rep(NA, length(words_lemma)) #cria vetor com mesma dimensão do vetor de palavras com o valor logico se houve ou não lemma
+  for (i in 1:length(words_lemma)) {
+    if(length(words_lemma[[i]]) == 0) {
+      lemma[i] <- FALSE
+      words_lemma[[i]] <- words[i]
+    } else {
+      lemma[i] <- TRUE
+    }
+  }
+
+  if(logico==FALSE) { # se o parametro logico=F, retorna a lista de palavras
+    return(words_lemma)
+  } else {
+    return(lemma) # se o parametro logico=T, retorna o vetor logico sobre se houve lemmas ou não
+  }
+}
 
 
 
