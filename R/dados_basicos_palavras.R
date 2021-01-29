@@ -339,11 +339,13 @@ conv_lista_DF <- function(lista) {
   DF <- data.frame(rep(NA, length(lista)))
   for(i in 1:length(lista)) {
     if(length(lista[[i]]) > 1) {
-      DF[i,] <- lista[i][1]
+      DF[i,] <- lista[[i]][1]
     } else {
       DF[i,] <- lista[i]
     }
   }
+  colnames(DF)[1] <- "first_words"
+  return(DF)
 }
 
 
