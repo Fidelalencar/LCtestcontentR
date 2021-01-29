@@ -5,7 +5,8 @@ Imports:
     tidyverse, 
     lexicon, 
     tm,
-    youtubecaption
+    youtubecaption,
+    hunspell
 Suggests:
     dplyr,
     RSQLite,
