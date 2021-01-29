@@ -243,8 +243,6 @@ palavras_legenda <- function(Insira_Link_do_Video_aqui,
 
 
 
-
-
 ##### RETORNANDO PALAVRAS MAIS FREQUENTES
 
 palavras_frequentes <- function(Insira_Link_do_Video_aqui,
@@ -308,7 +306,7 @@ our_lemmatizer <- function(words) {
 
 ## CRIANDO FUNÇÃO QUE RETORNA infos sobre o que o algoritmo não lemmatiza
 
-non_lemmatized <- function(words, logico=TRUE) {
+non_lemmatized <- function(words, logico=FALSE) {
   words_lemma <- hunspell_stem(words)
   # aqui eu substituo os elementos vazios (length=0, pois não encontrou lemma) pela palavra referente do texto
   lemma <- rep(NA, length(words_lemma)) #cria vetor com mesma dimensão do vetor de palavras com o valor logico se houve ou não lemma
@@ -320,18 +318,32 @@ non_lemmatized <- function(words, logico=TRUE) {
       lemma[i] <- FALSE
     }
   }
-  if(logico==TRUE) { # se o parametro logico=F, retorna a lista de palavras
-    return(lemma)
+  if(logico==TRUE) {
+    return(lemma) # se o parametro logico=T, retorna o vetor logico sobre onde houve lemmatizacao
   } else {
-    return(table(lemma)) # se o parametro logico=T, retorna o vetor logico sobre se houve lemmas ou não
+    return(subset(words_lemma, subset = lemma)) # se o parametro logico=F, retorna a lista de palavras
   }
 }
 
 
 
 
-# # para rodar as funcoes de lemmatizacao
-# Insira_Link_do_Video_aqui <- "https://www.youtube.com/watch?v=2W85Dwxx218"
-# words <- palavras_legenda(Insira_Link_do_Video_aqui,language="en",removestopwords=FALSE,
-#                           stemm=FALSE,unicas=FALSE)
+# para rodar as funcoes de lemmatizacao
+Insira_Link_do_Video_aqui <- "https://www.youtube.com/watch?v=2W85Dwxx218"
+words <- palavras_legenda(Insira_Link_do_Video_aqui,language="en",removestopwords=FALSE,
+                          stemm=FALSE,unicas=FALSE)
+
+
+### criando funcao que converte lista em DF (os elementos vetores da lista, teem seu 1o subelemento considerado)
+conv_lista_DF <- function(lista) {
+  DF <- data.frame(rep(NA, length(lista)))
+  for(i in 1:length(lista)) {
+    if(length(lista[[i]]) > 1) {
+      DF[i,] <- lista[i][1]
+    } else {
+      DF[i,] <- lista[i]
+    }
+  }
+}
+
 
