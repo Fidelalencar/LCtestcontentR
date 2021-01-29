@@ -285,14 +285,7 @@ palavras_frequentes <- function(Insira_Link_do_Video_aqui,
 
 if(require(hunspell) == F) install.packages("hunspell"); require(hunspell)
 
-# Insira_Link_do_Video_aqui = "https://www.youtube.com/watch?v=2W85Dwxx218"
-# words_v <- palavras_legenda(Insira_Link_do_Video_aqui,
-#                              language="en",
-#                              removestopwords=FALSE,
-#                              stemm=FALSE,
-#                              unicas=FALSE)
-
-our_lemmatizer <- function(words, logico=FALSE) {
+our_lemmatizer <- function(words) {
   words_lemma <- hunspell_stem(words)
 
   # aqui eu substituo os elementos vazios (length=0, pois não encontrou lemma) pela palavra referente do texto
@@ -305,13 +298,38 @@ our_lemmatizer <- function(words, logico=FALSE) {
       lemma[i] <- TRUE
     }
   }
-
-  if(logico==FALSE) { # se o parametro logico=F, retorna a lista de palavras
-    return(words_lemma)
-  } else {
-    return(lemma) # se o parametro logico=T, retorna o vetor logico sobre se houve lemmas ou não
-  }
+  return(words_lemma)
 }
 
 
+
+# para rodar a função
+Insira_Link_do_Video_aqui <- "https://www.youtube.com/watch?v=2W85Dwxx218"
+words <- palavras_legenda(Insira_Link_do_Video_aqui,language="en",removestopwords=FALSE,
+                          stemm=FALSE,unicas=FALSE)
+R <- our_lemmatizer(words, logico=FALSE)
+RL <- our_lemmatizer(words, logico=TRUE)
+table(RL)
+
+
+
+
+non_lemmatized <- function(words, logico=TRUE) {
+  words_lemma <- hunspell_stem(words)
+  # aqui eu substituo os elementos vazios (length=0, pois não encontrou lemma) pela palavra referente do texto
+  lemma <- rep(NA, length(words_lemma)) #cria vetor com mesma dimensão do vetor de palavras com o valor logico se houve ou não lemma
+  for (i in 1:length(words_lemma)) {
+    if(length(words_lemma[[i]]) == 0) {
+      lemma[i] <- TRUE
+      words_lemma[[i]] <- words[i]
+    } else {
+      lemma[i] <- FALSE
+    }
+  }
+  if(logico==TRUE) { # se o parametro logico=F, retorna a lista de palavras
+    return(lemma)
+  } else {
+    return(table(lemma)) # se o parametro logico=T, retorna o vetor logico sobre se houve lemmas ou não
+  }
+}
 
