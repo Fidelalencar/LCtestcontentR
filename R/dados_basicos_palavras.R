@@ -278,6 +278,8 @@ palavras_frequentes <- function(Insira_Link_do_Video_aqui,
 }
 
 
+###################################################
+############# FUNCOES DE LEMMATIZACAO #############
 
 #### CRIANDO NOSSO LEMMATIZADOR
 # fazendo uma funçaõ que faz o lemmatization usando humspell mas adaptando para
@@ -303,16 +305,8 @@ our_lemmatizer <- function(words) {
 
 
 
-# para rodar a função
-Insira_Link_do_Video_aqui <- "https://www.youtube.com/watch?v=2W85Dwxx218"
-words <- palavras_legenda(Insira_Link_do_Video_aqui,language="en",removestopwords=FALSE,
-                          stemm=FALSE,unicas=FALSE)
-R <- our_lemmatizer(words, logico=FALSE)
-RL <- our_lemmatizer(words, logico=TRUE)
-table(RL)
 
-
-
+## CRIANDO FUNÇÃO QUE RETORNA infos sobre o que o algoritmo não lemmatiza
 
 non_lemmatized <- function(words, logico=TRUE) {
   words_lemma <- hunspell_stem(words)
@@ -332,4 +326,12 @@ non_lemmatized <- function(words, logico=TRUE) {
     return(table(lemma)) # se o parametro logico=T, retorna o vetor logico sobre se houve lemmas ou não
   }
 }
+
+
+
+
+# # para rodar as funcoes de lemmatizacao
+# Insira_Link_do_Video_aqui <- "https://www.youtube.com/watch?v=2W85Dwxx218"
+# words <- palavras_legenda(Insira_Link_do_Video_aqui,language="en",removestopwords=FALSE,
+#                           stemm=FALSE,unicas=FALSE)
 
