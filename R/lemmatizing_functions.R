@@ -27,7 +27,7 @@ our_lemmatizer <- function(words) {
 
 
 
-## CRIANDO FUNÇÃO QUE RETORNA infos sobre o que o algoritmo não lemmatiza
+#### CRIANDO FUNÇÃO QUE RETORNA infos sobre o que o algoritmo não consegue lemmatizar
 
 non_lemmatized <- function(words, logico=FALSE) {
   words_lemma <- hunspell_stem(words)
@@ -50,15 +50,9 @@ non_lemmatized <- function(words, logico=FALSE) {
 
 
 
+#### criando funcao que converte lista em DF (os elementos vetores da lista, teem
+#seu 1o subelemento considerado)
 
-# # para rodar as funcoes de lemmatizacao
-# Insira_Link_do_Video_aqui <- "https://www.youtube.com/watch?v=2W85Dwxx218"
-# words <- palavras_legenda(Insira_Link_do_Video_aqui,language="en",removestopwords=FALSE,
-#                           stemm=FALSE,unicas=FALSE)
-#
-
-
-### criando funcao que converte lista em DF (os elementos vetores da lista, teem seu 1o subelemento considerado)
 conv_lista_DF <- function(lista) {
   DF <- data.frame(rep(NA, length(lista)))
   for(i in 1:length(lista)) {
@@ -71,4 +65,14 @@ conv_lista_DF <- function(lista) {
   colnames(DF)[1] <- "first_words"
   return(DF)
 }
+
+
+
+
+# # para rodar as funcoes de lemmatizacao
+# Insira_Link_do_Video_aqui <- "https://www.youtube.com/watch?v=2W85Dwxx218"
+# words <- palavras_legenda(Insira_Link_do_Video_aqui,language="en",removestopwords=FALSE,
+#                           stemm=FALSE,unicas=FALSE)
+#
+
 
