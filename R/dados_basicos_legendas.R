@@ -12,7 +12,12 @@
 #   Install Package:           'Ctrl + Shift + B'
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
-
+if(require(youtubecaption) == F) install.packages("youtubecaption"); require(youtubecaption)
+if(require(purrr) == F) install.packages("purrr"); require(purrr)
+if(require(dplyr) == F) install.packages("dplyr"); require(dplyr)
+if(require(RSQLite) == F) install.packages("RSQLite"); require(RSQLite)
+if(require(tm) == F) install.packages("tm"); require(tm)
+library(stringr)
 library(ggplot2)
 library(dplyr)
 library(tidyverse)
@@ -31,7 +36,6 @@ library(tidyverse)
 Dados_basicos_legenda <- function(Insira_Link_do_Video_aqui, language ="en") {
 
   # Captura da legenda:
-  if(require(youtubecaption) == F) install.packages("youtubecaption"); require(youtubecaption)
 
 
   #Insira_Link_do_Video_aqui <- "https://www.youtube.com/watch?v=fK2IJ43ppd0"
@@ -44,20 +48,17 @@ Dados_basicos_legenda <- function(Insira_Link_do_Video_aqui, language ="en") {
   # video sobre sabao e Covid-19: "https://www.youtube.com/watch?v=-LKVUarhtvE"
 
 
-  if(require(dplyr) == F) install.packages("dplyr"); require(dplyr)
-  if(require(RSQLite) == F) install.packages("RSQLite"); require(RSQLite)
   Legendas_vec <- pull(Legendas, start) # essa linha converte o tibble em vetor
   TdurationLegendas <- max(Legendas_vec) # ___ segundos = ___ minutos
 
   Legendas_string <- pull(Legendas, text) # essa linha converte o tibble em vetor
   NcharLegendas <- nchar(Legendas_string) # numero de caracteres por linha
 
-  library(stringr)
   Nwords_Legendas <- str_count(Legendas_string, boundary("word"))
   TpalavrasLegendas <-sum(Nwords_Legendas) # ___ palavras
 
 
-  if(require(tm) == F) install.packages("tm"); require(tm)
+
   Legendas_corpus <- Corpus(VectorSource(Legendas_string)) # criando corpus
 
   Legendas_corpus <- tm_map(Legendas_corpus, tolower)
@@ -146,7 +147,6 @@ Dados_basicos_legenda <- function(Insira_Link_do_Video_aqui, language ="en") {
 #' Aparentemente funcionou, no entanto, agora é preciso sempre inserir esse vetor.
 #' Não consegui fazer funcionar o valor default.
 Dados_basicos_legenda_vetor <- function(Insira_vetor_de_Links_aqui, vlanguage) {
-  if(require(purrr) == F) install.packages("purrr"); require(purrr)
   tabela <- as.data.frame(  # essas linhas convertem a lista em data.frame
     matrix(unlist(
       purrr::map2(Insira_vetor_de_Links_aqui, vlanguage, Dados_basicos_legenda)),

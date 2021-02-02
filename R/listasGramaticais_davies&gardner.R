@@ -18,22 +18,25 @@
 #
 # Opposites p. 106 ----
 
-opposite <- c('new', 'old', 'good', 'bad', 'big', 'little', 'large', 'small', 'young', 'old', 'black', 'white', 'high',
-               'low', 'long', 'short', 'public', 'private', 'right', 'left', 'right', 'wrong', 'same', 'different', 'best',
-               'worst', 'early', 'late', 'easy', 'hard', 'soft', 'hard', 'better', 'worse', 'possible', 'impossible',
-               'hot', 'cold', 'true', 'false', 'poor', 'rich', 'strong', 'weak', 'dead', 'alive', 'open', 'closed', 'light',
-               'dark', 'light', 'heavy', 'positive', 'negative', 'happy', 'sad', 'modern', 'ancient', 'close', 'far', 'wide',
-               'narrow', 'beautiful', 'ugly', 'powerful', 'weak', 'interesting', 'boring', 'deep', 'shallow')
+opposites <- function() {
 
-# transformando em DF de duas colunas
-opposites <- cbind.data.frame(split(opposite, rep(1:2, times=length(opposite)/2)), stringsAsFactors=F)
-names(opposites) <- c("word", "opposite")
+  opposite <- c('new', 'old', 'good', 'bad', 'big', 'little', 'large', 'small', 'young', 'old', 'black', 'white', 'high',
+                'low', 'long', 'short', 'public', 'private', 'right', 'left', 'right', 'wrong', 'same', 'different', 'best',
+                'worst', 'early', 'late', 'easy', 'hard', 'soft', 'hard', 'better', 'worse', 'possible', 'impossible',
+                'hot', 'cold', 'true', 'false', 'poor', 'rich', 'strong', 'weak', 'dead', 'alive', 'open', 'closed', 'light',
+                'dark', 'light', 'heavy', 'positive', 'negative', 'happy', 'sad', 'modern', 'ancient', 'close', 'far', 'wide',
+                'narrow', 'beautiful', 'ugly', 'powerful', 'weak', 'interesting', 'boring', 'deep', 'shallow')
 
-w <- data.frame(cbind(opposites$opposite, opposites$word))
-names(w) <- c("word", "opposite")
+  # transformando em DF de duas colunas
+  opposites <- cbind.data.frame(split(opposite, rep(1:2, times=length(opposite)/2)), stringsAsFactors=F)
+  names(opposites) <- c("word", "opposite")
 
-opposites <- data.frame(rbind(opposites, w)) # lista completa (com os valores invertidos)
+  w <- data.frame(cbind(opposites$opposite, opposites$word))
+  names(w) <- c("word", "opposite")
 
+  opposites <- data.frame(rbind(opposites, w)) # lista completa (com os valores invertidos)
+  return(opposites)
+}
 
 #
 # rm(x, opposite)
@@ -323,8 +326,19 @@ new_words <- c('email', 'terrorism', 'terrorist', 'affiliation', 'adolescent', '
 #
 #
 #
+#### lista de verbos irregulares retirados do link que segue:
+#
+# if(require(tidyverse) == F) install.packages('tidyverse'); require(tidyverse)
+# if(require(rvest) == F) install.packages('rvest'); require(rvest)
+# if(require(httr) == F) install.packages('httr'); require(httr)
+# if(require(xml2) == F) install.packages('xml2'); require(xml2)
 #
 #
+# link <- "https://www.gingersoftware.com/content/grammar-rules/verbs/list-of-irregular-verbs/"
+#
+# irregularVerbs <- link %>% httr::GET() %>% xml2::read_html() %>% rvest::html_node('table') %>% rvest::html_table(header = TRUE)
+#
+####
 #
 #
 # ##################################################################
