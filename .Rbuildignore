@@ -1,2 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.httr-oauth$
+^listasGramaticais_davies&gardner$
+^listasTematicas_davies&gardner$
