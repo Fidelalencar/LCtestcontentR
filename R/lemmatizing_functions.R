@@ -6,10 +6,10 @@
 # fazendo uma funçaõ que faz o lemmatization usando humspell mas adaptando para
 # repetir as palavras sem lemma no dict deles.
 
-if(require(hunspell) == F) install.packages("hunspell"); require(hunspell)
+#if(require(hunspell) == F) install.packages("hunspell"); require(hunspell)
 
 our_lemmatizer <- function(words) {
-  words_lemma <- hunspell_stem(words)
+  words_lemma <- hunspell::hunspell_stem(words)
 
   # aqui eu substituo os elementos vazios (length=0, pois não encontrou lemma) pela palavra referente do texto
   lemma <- rep(NA, length(words_lemma)) #cria vetor com mesma dimensão do vetor de palavras com o valor logico se houve ou não lemma
@@ -30,7 +30,7 @@ our_lemmatizer <- function(words) {
 #### CRIANDO FUNÇÃO QUE RETORNA infos sobre o que o algoritmo não consegue lemmatizar
 
 non_lemmatized <- function(words, logico=FALSE) {
-  words_lemma <- hunspell_stem(words)
+  words_lemma <- hunspell::hunspell_stem(words)
   # aqui eu substituo os elementos vazios (length=0, pois não encontrou lemma) pela palavra referente do texto
   lemma <- rep(NA, length(words_lemma)) #cria vetor com mesma dimensão do vetor de palavras com o valor logico se houve ou não lemma
   for (i in 1:length(words_lemma)) {

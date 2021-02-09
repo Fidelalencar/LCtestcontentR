@@ -3,25 +3,27 @@
 
 ## textos para testar
 
-language = "en"
-Insira_Link_do_Video_aqui <- "https://www.youtube.com/watch?v=2W85Dwxx218"
-Legendas <- get_caption(url = Insira_Link_do_Video_aqui,
-                        # Insira_Link_do_Video_aqui <- "https://www.youtube.com/watch?v=R7YmA_-8zZo"
-                        language = language,  # ATENCAO PARA A ESCOLHA DA LEGENDA
-                        savexl = FALSE, openxl = FALSE, path = getwd())
+# language = "en"
+# Insira_Link_do_Video_aqui <- "https://www.youtube.com/watch?v=2W85Dwxx218"
+# Insira_Link_do_Video_aqui <- "https://www.youtube.com/watch?v=zfttRfTmtuE"
+# Legendas <- get_caption(url = Insira_Link_do_Video_aqui,
+#                         # Insira_Link_do_Video_aqui <- "https://www.youtube.com/watch?v=R7YmA_-8zZo"
+#                         language = language,  # ATENCAO PARA A ESCOLHA DA LEGENDA
+#                         savexl = FALSE, openxl = FALSE, path = getwd())
+#
+#
+# texto <- "You2're 2best44 kno33wn 9for a number of novels dealing with the social
+# and marital interplay between ?migr? Americans, English people, and continental
+# Europeans. Examples of such, The Ambassadors. his late works have been compared
+# to impressionist painting."
+#
+# tokens_E_caracs <- texto
+# tokens_E_caracs <- Legendas$text
 
-
-texto <- "You2're 2best44 kno33wn 9for a number of novels dealing with the social
-and marital interplay between ?migr? Americans, English people, and continental
-Europeans. Examples of such, The Ambassadors. his late works have been compared
-to impressionist painting."
-
-tokens_E_caracs <- texto
-tokens_E_caracs <- Legendas$text
 
 ## tokenizando com pacote 'tau'
 
-if(require(tau) == F) install.packages("tau"); require(tau)
+#if(require(tau) == F) install.packages("tau"); require(tau)
 
 our_tokenizer <- function(tokens_E_caracs) { # pode receber um string, um vetor ou uma coluna de DF (para pacote legendas do youtube)
   tokens_E_caracs <- tau::tokenize(tokens_E_caracs)

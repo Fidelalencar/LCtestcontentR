@@ -12,15 +12,15 @@
 #   Install Package:           'Ctrl + Shift + B'
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
-if(require(youtubecaption) == F) install.packages("youtubecaption"); require(youtubecaption)
-if(require(purrr) == F) install.packages("purrr"); require(purrr)
-if(require(dplyr) == F) install.packages("dplyr"); require(dplyr)
-if(require(RSQLite) == F) install.packages("RSQLite"); require(RSQLite)
-if(require(tm) == F) install.packages("tm"); require(tm)
-library(stringr)
-library(ggplot2)
-library(dplyr)
-library(tidyverse)
+
+
+# if(require(youtubecaption) == F) install.packages("youtubecaption"); require(youtubecaption)
+# if(require(purrr) == F) install.packages("purrr"); require(purrr)
+# if(require(dplyr) == F) install.packages("dplyr"); require(dplyr)
+# if(require(RSQLite) == F) install.packages("RSQLite"); require(RSQLite)
+# if(require(tm) == F) install.packages("tm"); require(tm)
+# library(stringr)
+# library(tidyverse)
 
 # CAPTURA DE LEGENDAS do YouTube: youtubecaption E analise básica do que é falado ----
 
@@ -41,7 +41,7 @@ Dados_basicos_legenda <- function(Insira_Link_do_Video_aqui, language ="en") {
   #Insira_Link_do_Video_aqui <- "https://www.youtube.com/watch?v=fK2IJ43ppd0"
 
 
-  Legendas <- get_caption(url = Insira_Link_do_Video_aqui,
+  Legendas <- youtubecaption::get_caption(url = Insira_Link_do_Video_aqui,
                           language = language,  # "en-GB", # ATENCAO PARA A ESCOLHA DA LEGENDA
                           savexl = FALSE, openxl = FALSE, path = getwd())
   # video sobre "slow aging": "https://www.youtube.com/watch?v=QRt7LjqJ45k"

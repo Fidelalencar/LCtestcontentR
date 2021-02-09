@@ -6,12 +6,15 @@ Imports:
     lexicon, 
     tm,
     youtubecaption,
-    hunspell
+    hunspell, 
+    tau,
+    qdap
 Suggests:
     dplyr,
     RSQLite,
     stringr,
-    purrr
+    purrr, 
+    tokenizers
 Title: Functionalities and objects for content production to the website.
 Version: 0.1.0
 URL: https://github.com/Fidelalencar/LCtestcontentR
