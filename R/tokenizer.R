@@ -53,14 +53,14 @@ our_tokenizer <- function(tokens_E_caracs) { # pode receber um string, um vetor 
 #### Identificadores de posicoes
 # funcoes que retornam vetores logicos identificando a posicao dos espacos, quebras, pontuacao, etc.
 
-## identificador dos espacos
-spc <- grepl(" ", tokens_E_caracs)
-## identificador de quebras
-qbr <- grepl("\n", tokens_E_caracs)
-## identificador de pontuacao
-pnt <- grepl("[!@#$%&*()_=+{}.,]|-|\\[|\\]", tokens_E_caracs)
-## identificador de numeros (identifica numeros soltos ou presentes em palavras)
-nmb <- grepl("[0-9]", tokens_E_caracs)
+# ## identificador dos espacos
+# spc <- grepl(" ", tokens_E_caracs)
+# ## identificador de quebras
+# qbr <- grepl("\n", tokens_E_caracs)
+# ## identificador de pontuacao
+# pnt <- grepl("[!@#$%&*()_=+{}.,]|-|\\[|\\]", tokens_E_caracs)
+# ## identificador de numeros (identifica numeros soltos ou presentes em palavras)
+# nmb <- grepl("[0-9]", tokens_E_caracs)
 
 
 

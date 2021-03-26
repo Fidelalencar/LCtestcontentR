@@ -29,8 +29,8 @@
 #' Dados_basicos_legenda(x, y)
 #'
 #' A funçaõ retorna dados básicos gerais sobre o texto das legendas.
-#' @param x é string com link para video do youtube.
-#' @param y é um string indicando qual o idioma da legenda, o valor
+#' @param Insira_Link_do_Video_aqui é string com link para video do youtube.
+#' @param language é um string indicando qual o idioma da legenda, o valor
 #' default é "en". Para entender quais os possiveis strings de 'y', ver o
 #' parametro language da função get_caption() do pacote "youtubecaption"
 Dados_basicos_legenda <- function(Insira_Link_do_Video_aqui, language ="en") {
@@ -136,8 +136,8 @@ Dados_basicos_legenda <- function(Insira_Link_do_Video_aqui, language ="en") {
 #'
 #' A funçaõ retorna  um data.frame com dados básicos gerais sobre o texto
 #' das legendas.
-#' @param x é vetor de strings com links para video do youtube.
-#' @param y é um vetor de strings indicando quais os idiomas das legendas,
+#' @param Insira_vetor_de_Links_aquix é vetor de strings com links para video do youtube.
+#' @param vlanguage é um vetor de strings indicando quais os idiomas das legendas,
 #' o valor default deveria ser "en-US", mas não consegui fazer funcionar.
 #' Para entender quais os possiveis strings do vetor 'y', ver o parametro
 #' language da função get_caption() do pacote "youtubecaption".
