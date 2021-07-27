@@ -1,18 +1,12 @@
-# Hello, world!!
-#
-# This is an example function named 'hello'
-# which prints 'Hello, world!'.
-#
-# You can learn more about package authoring with RStudio at:
-#
-#   http://r-pkgs.had.co.nz/
-#
-# Some useful keyboard shortcuts for package authoring:
-#
-#   Install Package:           'Ctrl + Shift + B'
-#   Check Package:             'Ctrl + Shift + E'
-#   Test Package:              'Ctrl + Shift + T'
+#############################
+### Script para funcoes de dados basicos de pre-analise das legendas de um video
+#############################
+# # # INDICE
+# (1) retorna dados basicos da legenda
+# (2) reproduz o processo anterior para muitas legendas
+# (3) retorna informações sobre nivel de dificuldade da legenda
 
+############
 
 # if(require(youtubecaption) == F) install.packages("youtubecaption"); require(youtubecaption)
 # if(require(purrr) == F) install.packages("purrr"); require(purrr)
@@ -22,7 +16,9 @@
 # library(stringr)
 # library(tidyverse)
 
-# CAPTURA DE LEGENDAS do YouTube: youtubecaption E analise básica do que é falado ----
+
+######################
+# (1) CAPTURA DE LEGENDAS do YouTube: youtubecaption E analise básica do que é falado ----
 
 ##### CRIANDO A FUNCAO ----
 
@@ -106,7 +102,9 @@ Dados_basicos_legenda <- function(Insira_Link_do_Video_aqui, language ="en") {
 
 
 
-##### USANDO A FUNCAO REPETIDAMENTE PARA GERAR TABELA COM DADOS DE VARIOS VIDEOS!!! ----
+
+######################
+# (2) USANDO A FUNCAO REPETIDAMENTE PARA GERAR TABELA COM DADOS DE VARIOS VIDEOS!!! ----
 
 # videos <- c(
 #   "https://www.youtube.com/watch?v=HIdflecvQG8",
@@ -158,5 +156,91 @@ Dados_basicos_legenda_vetor <- function(Insira_vetor_de_Links_aqui, vlanguage) {
                         "Words per sec")
   return(tabela)
 }
+
+
+
+######################
+# (3) Retornando indicadores de nivel de dificuldade do vocabulario da legenda
+
+
+
+
+#' Level_legenda()
+#'
+#' função que recebe um vetor de palavras e retorna uma lista contendo as palavras detectadas
+#' para cada nível; as palavras não detectadas em nenhum nivel ;
+#' vetor com as palavras consideradas na legenda ;
+#' Pequeno DF indicando a proporção de palavras por nivel
+#'
+#' @param words é o vetor string com as palavras to texto
+Level_legenda <- function(words) {
+  words <- words[!grepl(" |\\-|\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:", words)]
+  words <- words[!grepl("<|>", words)]
+  words <- removeWords(words, tm::stopwords(kind = "en")) # do tm
+  words <- words[!is.na(words)]
+  words <- words[words != ""]
+  words <- words[words != " "]
+  trat.Info.1.0a1 <- trat.Info.1.0 %>% filter(trat.Info.1.0$Level == "A1")
+  trat.Info.1.0a2 <- trat.Info.1.0 %>% filter(trat.Info.1.0$Level == "A2")
+  trat.Info.1.0b1 <- trat.Info.1.0 %>% filter(trat.Info.1.0$Level == "B1")
+  trat.Info.1.0b2 <- trat.Info.1.0 %>% filter(trat.Info.1.0$Level == "B2")
+  trat.Info.1.0c1 <- trat.Info.1.0 %>% filter(trat.Info.1.0$Level == "C1")
+  trat.Info.1.0c2 <- trat.Info.1.0 %>% filter(trat.Info.1.0$Level == "C2")
+  Na1 <- c()
+  Na2 <- c()
+  Nb1 <- c()
+  Nb2 <- c()
+  Nc1 <- c()
+  Nc2 <- c()
+  N0 <- c()
+  lw <- length(words)
+  for(i in 1:lw) {
+    np <- words[i]  # tirei o removePunctuation()
+    na1 <- grep(paste0("^", np, "$"), trat.Info.1.0a1$Base.Word)
+    na2 <- grep(paste0("^", np, "$"), trat.Info.1.0a2$Base.Word)
+    nb1 <- grep(paste0("^", np, "$"), trat.Info.1.0b1$Base.Word)
+    nb2 <- grep(paste0("^", np, "$"), trat.Info.1.0b2$Base.Word)
+    nc1 <- grep(paste0("^", np, "$"), trat.Info.1.0c1$Base.Word)
+    nc2 <- grep(paste0("^", np, "$"), trat.Info.1.0c2$Base.Word)
+    Na1 <- c(Na1, na1)
+    Na2 <- c(Na2, na2)
+    Nb1 <- c(Nb1, nb1)
+    Nb2 <- c(Nb2, nb2)
+    Nc1 <- c(Nc1, nc1)
+    Nc2 <- c(Nc2, nc2)
+    n0  <- c(na1, na2, nb1, nb2, nc1, nc2)
+    if(length(n0) == 0) {
+      N0 <- c(N0, i)
+    }
+  }
+  count <- data.frame(total.words= c(length(Na1),length(Na2),length(Nb1),
+                                     length(Nb2),length(Nc1),length(Nc2),
+                                     length(N0)),
+                      percent.total.words = c(length(Na1)/lw,length(Na2)/lw,length(Nb1)/lw,
+                                              length(Nb2)/lw,length(Nc1)/lw,length(Nc2)/lw,
+                                              length(N0)/lw))
+  row.names(count) <- c("A1", "A2", "B1", "B2", "C1", "C2", "NoLvl")
+
+  results <- list(A1=trat.Info.1.0a1$Base.Word[Na1],
+                  A2=trat.Info.1.0a2$Base.Word[Na2],
+                  B1=trat.Info.1.0b1$Base.Word[Nb1],
+                  B2=trat.Info.1.0b2$Base.Word[Nb2],
+                  C1=trat.Info.1.0c1$Base.Word[Nc1],
+                  C2=trat.Info.1.0c2$Base.Word[Nc2],
+                  Nolvl=words[N0],
+                  words.text=words,
+                  Count=count)
+
+  return(results)
+}
+
+##### dados que criei para testar essa funcao
+# setwd("C:/Users/Paren/Dropbox/Learning_Community/LCtestcontentR/data")
+# load(file="testdata_Level.RData")
+
+
+
+
+
 
 
