@@ -420,6 +420,7 @@
 # load("Plurals.2.0.Rdata")
 # load("contractions.2.0.Rdata")
 # # load(file="trat.Info.1.0.RData")
+# # load(file="lemmat300m.1.0.Rdata")
 #
 # contractions.2.0 <- contractions.2.0[c(3,1, 2)]
 # colnames(contractions.2.0) <- c("lemmas", "words", "pos")
@@ -440,6 +441,14 @@
 #                         verb_variations.2.0, contractions.2.0)
 #
 # lemmasDF.2.0 <- na.exclude(lemmasDF.2.0)
+#
+# lemmasDF.2.0 <- unique(lemmasDF.2.0)
+
+# unicas <- unique(lemmasDF.2.0$lemmas)
+# UNICAS <- data.frame(lemmas=unicas, words=unicas, pos= "base")
+# lemmasDF.2.0 <- rbind(lemmasDF.2.0, UNICAS)
+
+#
 #
 # setwd("C:/Users/Paren/Dropbox/Learning_Community/LCtestcontentR/data")
 # save(lemmasDF.2.0, file = "lemmasDF.2.0.Rdata")

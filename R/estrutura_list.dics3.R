@@ -80,24 +80,26 @@
 #   read.csv2("C:/Users/Paren/Dropbox/Udacity/LearningCommunityConteudo/listas_palavras/ResourcesData/TratamentoInformacao/Tratamento Informação - Sheet1.csv",
 #             sep = ",",
 #             header = T)
-# trat_infoS1 <- trat_infoS1[c(1,2)]
-# colnames(trat_infoS1) <- c("Word", "Synonym")
-# trat_infoS1$Synonym <- str_to_lower(trat_infoS1$Synonym)
-# trat_infoS1 <- trat_infoS1 %>% filter(Synonym != "")
-#
-# #Sheet ????   # vem das listas de tratamento da informacao
-# trat_infoS5 <-
-#   read.csv2("C:/Users/Paren/Dropbox/Udacity/LearningCommunityConteudo/listas_palavras/ResourcesData/TratamentoInformacao/Tratamento Informação - Sheet5.csv",
-#             sep = ",",
-#             header = T)
-# trat_infoS5 <- trat_infoS5[c(1,3)]
-# colnames(trat_infoS5) <- c("Word", "Synonym")
-# trat_infoS5$Synonym <- str_to_lower(trat_infoS5$Synonym)
-# trat_infoS5 <- trat_infoS5 %>% filter(Synonym != "")
-#
-#
-# Syn <- rbind(Syn1, Syn2, Syn3, Syn4, Syn5, Syn6, Syn7, Syn8, trat_infoS1, trat_infoS5)
-# rm("Syn1", "Syn2", "Syn3", "Syn4", "Syn5", "Syn6", "Syn7", "Syn8", "trat_infoS1", "trat_infoS5")
+
+######## primeiro usamos essas base, mas depois retiramos pq tinha muito ruido
+#### trat_infoS1 <- trat_infoS1[c(1,2)]
+#### colnames(trat_infoS1) <- c("Word", "Synonym")
+#### trat_infoS1$Synonym <- str_to_lower(trat_infoS1$Synonym)
+#### trat_infoS1 <- trat_infoS1 %>% filter(Synonym != "")
+####
+#### #Sheet ????   ####vem das listas de tratamento da informacao
+#### trat_infoS5 <-
+####  read.csv2("C:/Users/Paren/Dropbox/Udacity/LearningCommunityConteudo/listas_palavras/ResourcesData/TratamentoInformacao/Tratamento Informação - Sheet5.csv",
+####            sep = ",",
+####            header = T)
+#### trat_infoS5 <- trat_infoS5[c(1,3)]
+#### colnames(trat_infoS5) <- c("Word", "Synonym")
+#### trat_infoS5$Synonym <- str_to_lower(trat_infoS5$Synonym)
+#### trat_infoS5 <- trat_infoS5 %>% filter(Synonym != "")
+
+# #
+# Syn <- rbind(Syn1, Syn2, Syn3, Syn4, Syn5, Syn6, Syn7, Syn8)
+# ## rm("Syn1", "Syn2", "Syn3", "Syn4", "Syn5", "Syn6", "Syn7", "Syn8", "trat_infoS1", "trat_infoS5")
 #
 # Syn$Word <- str_to_lower(Syn$Word)
 # Syn$Synonym <- str_to_lower(Syn$Synonym)
@@ -123,16 +125,19 @@
 # Syn$Word <- sub("construction ", "construction", Syn$Word)
 # def <- Syn[grep(".* .* .* .*", Syn$Synonym),]      # <----------------- Incluir na lista de definições !!!!!!!
 # Syn <- Syn[-c(grep(".* .* .* .*", Syn$Synonym)),]
-# Syn <- Syn[-c(grep("in questions", Syn$Synonym)),]
-# Syn$Synonym[grep(", determiner ", Syn$Synonym)[[1]]] <- "remaining"
-# Syn$Synonym[grep(", determiner", Syn$Synonym)[[1]]] <- "twelve"
-# coloc <- Syn[(grep("etc\\.", Syn$Synonym)),]     # <----------------- Incluir na lista de colocations !!!!!
-# Syn <- Syn[-c(grep("etc\\.", Syn$Synonym)),]
+#
+# ########### erros que não existem mais pela remoção das ultimas bases
+# ###### Syn <- Syn[-c(grep("in questions", Syn$Synonym)),]
+# ###### Syn$Synonym[grep(", determiner ", Syn$Synonym)[[1]]] <- "remaining"
+# ###### Syn$Synonym[grep(", determiner", Syn$Synonym)[[1]]] <- "twelve"
+# ###### coloc <- Syn[(grep("etc\\.", Syn$Synonym)),]     # <----------------- Incluir na lista de colocations !!!!!
+# ###### Syn <- Syn[-c(grep("etc\\.", Syn$Synonym)),]
+#
 # Syn$Synonym <- sub(",", "", Syn$Synonym)
 # Syn <- unique(Syn)
 # Syn <- Syn[-c(grep("premiss", Syn$Synonym)),]
 # Syn <- Syn[Syn$Word != Syn$Synonym,]
-
+#
 # Syn <- Syn[-c(grep("say/tell", Syn$Word)),]
 # x <- data.frame(Word=c(rep("say", 4), rep("tell", 4)), Synonym=rep(c("recount", "narrate", "explain", "reveal"), 2))
 # Syn <- rbind(Syn, x)
@@ -140,48 +145,28 @@
 
 
 
-
-
-# # # limpando stopwords
-# stop <- tm::stopwords(kind = "en")
-# N <- c()
-# M <- c()
-# for(i in 1:length(stop)) {
-#   n <- grep(paste0("^", stop[i], "$") , Syn$Word)
-#   N <- c(N,n)
-#   m <- grep(paste0("^", stop[i], "$") , Syn$Synonym)
-#   M <- c(M,m)
-# }
-# x <- unique(c(N,M))
-# SSS <- Syn[x,] # <-------------------- Sinonimos de stop words
+###############limpando stopwords - Nao limpamos stopwords apos retirada das bases
+#####stop <- tm::stopwords(kind = "en")
+#####N <- c()
+#####M <- c()
+#####for(i in 1:length(stop)) {
+#####  n <- grep(paste0("^", stop[i], "$") , Syn$Word)
+#####  N <- c(N,n)
+#####  m <- grep(paste0("^", stop[i], "$") , Syn$Synonym)
+#####  M <- c(M,m)
+#####}
+#####x <- unique(c(N,M))
+#####SSS <- Syn[x,] #####<-------------------- Sinonimos de stop words
 #
-# Syn <- Syn[-x,]
-# rm("N", "n", "M", "m", "stop", "i", "x", "SSS")
+#####Syn <- Syn[-x,]
+#####rm("N", "n", "M", "m", "stop", "i", "x", "SSS")
 #
 #
-# # o que fazer com as linas q tem / na 2a coluna ??? algumas sao por causa de preposição
-# syn.with.bar <- Syn[grep("/", Syn$Synonym),]  # <------------ enviado para limpeza manual
-# # # # # write.csv2(syn.with.bar, file= "syn.with.bar.csv")
+##########o que fazer com as linas q tem / na 2a coluna ??? algumas sao por causa de preposição
+#####syn.with.bar <- Syn[grep("/", Syn$Synonym),]  #####<------------ enviado para limpeza manual
+#########################write.csv2(syn.with.bar, file= "syn.with.bar.csv")
 #
-# Syn <- Syn[-grep("/", Syn$Synonym),]
-
-
-
-
-
-
-############# ESTAMOS AQUI  # <-------------------- ESTAMOS AQUI
-
-
-
-
-
-# # o pacote qdap tem um retornador de sinonimos
-# qdap::synonyms("structure")
-# synonym.frame = qdapDictionaries::key.syn  # https://cran.r-project.org/web/packages/qdapDictionaries/qdapDictionaries.pdf
-#
-
-
+#####Syn <- Syn[-grep("/", Syn$Synonym),]
 
 
 
@@ -276,33 +261,92 @@
 #
 # Syn_organized <- rbind(maior, menor, igual, igual1)
 # colnames(Syn_organized) <- c("B.word_dif", "lvl.base", "Syn_easy", "lvl.syn")
-#
-#
-# rm("igual", "igual1", "maior", "menor", "Syn.Synonyms", "Syn.Words", "SynW_L", "SynS_L", "r", "Syn_leveled_NoNA")
-
-
-
-
-
-#
-# ### testando
-#
-# # # setwd("C:/Users/Paren/Dropbox/Learning_Community/LCtestcontentR/data")
-# # # load(file="testdata_Level.RData")
 # #
-# # original <- paste(testdata_Level, collapse="")
 # #
-# # convert <- testdata_Level
-# # for(i in 1:length(convert)) {
-# #   x <- convert[[i]]
-# #   n <- grep(paste0("^",x, "$"), Syn_organized$B.word_dif)
-# #   z <- paste(Syn_organized$Syn_easy[n], collapse = "/")
-# #   convert[[i]] <- z
-# # }
-# #
-# # convert <- paste(convert, collapse="")
+# # rm("igual", "igual1", "maior", "menor", "Syn.Synonyms", "Syn.Words", "SynW_L", "SynS_L", "r", "Syn_leveled_NoNA", "a", "x")
 #
-# ############## ----
+# Syn_organized <- unique(Syn_organized)
+
+# setwd("C:/Users/Paren/Dropbox/Learning_Community/LCtestcontentR/data")
+# # # # save(Syn_organized, file= "Syn.1.0.Rdata")
+
+
+
+############# CONCLUIMOS
+### adicional:
+# # o pacote qdap tem um retornador de sinonimos
+# qdap::synonyms("strange")
+# synonym.frame = qdapDictionaries::key.syn  # https://cran.r-project.org/web/packages/qdapDictionaries/qdapDictionaries.pdf
 #
+
+
+
+
+
+##################################
+
+### Para testar e executar o exercicio de sinonimos, ir para o script Syn&Ant
+
+############## ----
+
+
+
+
+
+
+
+########## EXPANDIDO O lemmasDF.2.0 -> Criando lemmasDF.2.1
+#
+# O lemmatizador lemmasDF.2.1 é a expansão do lemmasDF.2.0
+# em que se adiciona todas as variações das palavras da lista
+# dos sinonimos que não estavam na lista com niveis ("trat.Info.1.0").
+
+#
+# x <- Syn_organized[Syn_organized$lvl.base =="7",]
+# y <- x$B.word_dif
+#
+# i=1
+# N <- c()
+# for(i in 1:length(y)) {
+#   print(i)
+#   n <- grep(paste0("^", y[i], "$"), lemmat300m$words)
+#   N <- c(N, n)
+# }
+#
+# N1 <- unique(N)
+#
+# view(lemmat300m[N1,])
+#
+# expansao_syn <- lemmat300m[N1,]
+# expansao_syn_lista <- expansao_syn$lemma
+#
+# i=1
+# M <- c()
+# for(i in 1:length(expansao_syn_lista)) {
+#   print(i)
+#   n <- grep(paste0("^", expansao_syn_lista[[i]], "$"), lemmat300m$lemma)
+#   M <- c(M, n)
+# }
+# M1 <- unique(M)
+#
+# view(lemmat300m[M1,])
+#
+#
+# complemento <- lemmat300m[M1,]
+# complemento <- complemento[c(3,1,2)]
+# original <- lemmasDF.2.0
+# colnames(complemento) <- colnames(original)
+# lemmasDF.2.1 <- rbind(original, complemento)
+# lemmasDF.2.1 <- unique(lemmasDF.2.1)
+
+# setwd("C:/Users/Paren/Dropbox/Learning_Community/LCtestcontentR/data")
+# # # # save(lemmasDF.2.1, file= "lemmasDF.2.1.Rdata")
+
+
+
+
+
+
+
 
 

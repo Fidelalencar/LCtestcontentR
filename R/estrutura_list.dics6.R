@@ -1,8 +1,8 @@
 
 
-# ####################################
+# ################# Criando a lista de exemplos
 #
-#
+# if(require(xlsx) == F) install.packages("xlsx"); require(xlsx)
 # List_examples <- read.xlsx(path = "C:/Users/Paren/Dropbox/Udacity/LearningCommunityConteudo/listas_palavras",
 #                              file = "List_examples.xlsx",
 #                              header = F,
@@ -50,7 +50,29 @@
 #
 #
 # setwd("C:/Users/Paren/Dropbox/Udacity/LearningCommunityConteudo/listas_palavras")
-# save(List_examples, file="List_examples.RData")
+# # # save(List_examples, file="List_examples.RData")
 
 
+
+
+
+
+
+########### tratando
+
+# setwd("C:/Users/Paren/Dropbox/Udacity/LearningCommunityConteudo/listas_palavras")
 # load("List_examples.RData")
+
+
+# # separando os dados em uma lista com base words de uma so palavra e outra de mais palavras
+# List_examples1 <- List_examples[!grepl(". .", List_examples$base_Word),]
+# List_examples2 <- List_examples[grepl(". .", List_examples$base_Word),]
+
+
+
+
+
+
+
+
+
