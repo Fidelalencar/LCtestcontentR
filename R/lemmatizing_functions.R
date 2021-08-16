@@ -31,7 +31,7 @@ our_lemmatizer2 <- function(words, base=lemmasDF.2.0, return="all") {
 }
 
 
-non_lemmatized2 <- function(words, base=lemmasDF.2.0) {
+non_lemmatized2 <- function(words, base=lemmasDF.2.0, return="all") {
   non_lemmatized <- c()
   words <- words[!grepl(" |\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:", words)] # nao remover nem - nem ' em ’
   words <- words[!grepl("<|>", words)]
@@ -56,19 +56,32 @@ non_lemmatized2 <- function(words, base=lemmasDF.2.0) {
 }
 
 
-# ### so para testar
-# x <- palavras_legenda("https://www.youtube.com/watch?v=Th2QzJwy8tI",
-#                       removestopwords=FALSE,
-#                       unicas = F)
-# x1 <- grep("[^ ]$", x, value = T)
-# z <- our_lemmatizer2(x1)
-# z1 <- non_lemmatized2(x1)
-# # Algumas conclusoes desse teste:
-# # (1) esse tipo de processo e' computacionalmente muito custoso. demoramuito
-# # (2) o algoritmo como criei nao faz modificacoes em expressoes como "we're",
-# # "don't", "didn't", talvez seja o caso adicionar isso a lista de lemamtizacao
-# # isso nao foi tao facil perceber, pois qnd removemos stopwords, palavras_legenda()
-# # elas ficam de fora.
+
+our_lemmatizer3 <- function(text, base=lemmasDF.2.0, return="first"){
+  final <- text
+  text_tok <- our_tokenizer(text)
+  text_lem <- our_lemmatizer2(text_tok, base=base, return=return)
+  #
+  posit_pontuacao <- grepl(" |\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:|<|>", text_tok) #
+  pontuacao <- text_tok[grepl(" |\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:|<|>", text_tok)]
+  final <- rep(NA, length(text_tok)) # recriando a pontuação
+  p <- 1
+  c <- 1
+  for(e in 1:length(final)) {
+    if(posit_pontuacao[e] == T) {
+      final[e] <- pontuacao[p]
+      p <- p+1
+    } else {
+      final[e] <- text_lem[c]
+      c <- c+1
+    }
+  }
+  #print(paste(final, collapse=""))
+  z <- paste(final, collapse="")
+  return(z)
+}
+
+
 
 
 
