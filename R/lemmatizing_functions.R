@@ -1,55 +1,78 @@
 
 ###################################################
 ############# FUNCOES DE LEMMATIZACAO #############
+### (essa é a versão2 .  a versão 1 já apaguei)
 
-#### CRIANDO NOSSO LEMMATIZADOR
-# fazendo uma funçaõ que faz o lemmatization usando humspell mas adaptando para
-# repetir as palavras sem lemma no dict deles.
 
-#if(require(hunspell) == F) install.packages("hunspell"); require(hunspell)
+our_lemmatizer2 <- function(words, base=lemmasDF.2.0, return="all") {
 
-our_lemmatizer <- function(words) {
-  words_lemma <- hunspell::hunspell_stem(words)
+  words <- words[!grepl(" |\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:", words)] # nao remover nem - nem ' nem ’
+  words <- words[!grepl("<|>", words)]
+  lemmed <- c()
+  for(i in 1:length(words)) {
+    np <- words[i]
+    n <- grep(paste0("^", np, "$"), base$words)
 
-  # aqui eu substituo os elementos vazios (length=0, pois não encontrou lemma) pela palavra referente do texto
-  lemma <- rep(NA, length(words_lemma)) #cria vetor com mesma dimensão do vetor de palavras com o valor logico se houve ou não lemma
-  for (i in 1:length(words_lemma)) {
-    if(length(words_lemma[[i]]) == 0) {
-      lemma[i] <- FALSE
-      words_lemma[[i]] <- words[i]
-    } else {
-      lemma[i] <- TRUE
+    if(length(n) > 1 & return == "first") {  # caso a lista tenha mais de uma palavra na primeira coluna e eu precise só de uma
+      n <- n[1]
     }
+
+    #print(paste0("palavra na base : ", np, "-> ", "index das palavras: ", i))
+    if(length(n) == 0) {
+      n <- np
+    } else {
+      n <- base$lemmas[n]
+    }
+    lemmed <- c(lemmed, n)
   }
-  return(words_lemma)
+  # selecionando apensa os valores que nao terminam com espaco
+  lemmed <- grep("[^ ]$", lemmed, value = T)
+  return(lemmed)
 }
 
 
-
-
-#### CRIANDO FUNÇÃO QUE RETORNA infos sobre o que o algoritmo não consegue lemmatizar
-
-non_lemmatized <- function(words, logico=FALSE) {
-  words_lemma <- hunspell::hunspell_stem(words)
-  # aqui eu substituo os elementos vazios (length=0, pois não encontrou lemma) pela palavra referente do texto
-  lemma <- rep(NA, length(words_lemma)) #cria vetor com mesma dimensão do vetor de palavras com o valor logico se houve ou não lemma
-  for (i in 1:length(words_lemma)) {
-    if(length(words_lemma[[i]]) == 0) {
-      lemma[i] <- TRUE
-      words_lemma[[i]] <- words[i]
-    } else {
-      lemma[i] <- FALSE
+non_lemmatized2 <- function(words, base=lemmasDF.2.0) {
+  non_lemmatized <- c()
+  words <- words[!grepl(" |\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:", words)] # nao remover nem - nem ' em ’
+  words <- words[!grepl("<|>", words)]
+  words <- unique(words)
+  for(i in 1:length(words)) {
+    np <- words[i]
+    # np <- words[i]
+    n <- grep(paste0("^",np, "$"), base$words)
+    # print(paste0("palavra na base : ", n, "-> ", "index das palavras: ", i))
+    # print(length(n))
+    # print(length(n)== 0)
+    if(length(n) == 0) {
+      w <- words[i]
+      non_lemmatized <- c(non_lemmatized, w)
     }
   }
-  if(logico==TRUE) {
-    return(lemma) # se o parametro logico=T, retorna o vetor logico sobre onde houve lemmatizacao
-  } else {
-    return(subset(words_lemma, subset = lemma)) # se o parametro logico=F, retorna a lista de palavras
-  }
+  S <- tm::stopwords(kind = "en")
+  non_lemmatized <- non_lemmatized[!non_lemmatized %in% S]
+  # selecionando apensa os valores que nao terminam com espaco
+  # non_lemmatized <- grep("[^ ]$", non_lemmatized, value = T)
+  return(non_lemmatized)
 }
 
 
+# ### so para testar
+# x <- palavras_legenda("https://www.youtube.com/watch?v=Th2QzJwy8tI",
+#                       removestopwords=FALSE,
+#                       unicas = F)
+# x1 <- grep("[^ ]$", x, value = T)
+# z <- our_lemmatizer2(x1)
+# z1 <- non_lemmatized2(x1)
+# # Algumas conclusoes desse teste:
+# # (1) esse tipo de processo e' computacionalmente muito custoso. demoramuito
+# # (2) o algoritmo como criei nao faz modificacoes em expressoes como "we're",
+# # "don't", "didn't", talvez seja o caso adicionar isso a lista de lemamtizacao
+# # isso nao foi tao facil perceber, pois qnd removemos stopwords, palavras_legenda()
+# # elas ficam de fora.
 
+
+
+####################################################################################################
 #### criando funcao que converte lista em DF (os elementos vetores da lista, teem
 #seu 1o subelemento considerado)
 
@@ -68,11 +91,5 @@ conv_lista_DF <- function(lista) {
 
 
 
-
-# # para rodar as funcoes de lemmatizacao
-# Insira_Link_do_Video_aqui <- "https://www.youtube.com/watch?v=2W85Dwxx218"
-# words <- palavras_legenda(Insira_Link_do_Video_aqui,language="en",removestopwords=FALSE,
-#                           stemm=FALSE,unicas=FALSE)
-#
 
 
