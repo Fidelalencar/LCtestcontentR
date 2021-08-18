@@ -1,7 +1,7 @@
 
 
 ##################################
-### (1) testando e executando o exercicio de sinonimos
+### (1) criando função que executa as sugestões de sinonimos
 
 
 # example <- "https://www.youtube.com/watch?v=4GsjEPRMzdw" # easy
@@ -28,72 +28,77 @@
 #
 # # ajustes para facilitar o trabalho
 # testdata_Level <- testdata_Level#[1:220]
-# convert <- testdata_Level
-#
-# # separo os elementos com pontuação
-# convert1 <- convert[!grepl(" |\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:|<|>", convert)] # nao remover nem - nem ' nem ’
-# pontuacao <- convert[grepl(" |\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:|<|>", convert)]
-# posit_pontuacao <- grepl(" |\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:|<|>", convert) #
-# posit_NA <- is.na(convert1)
-# convert1 <- convert1[!is.na(convert1)]
-#
-#
-#
-# convert2 <- convert1
-# vazio <- c()
-# print("Checando sinônimos")
-# for(i in 1:length(convert1)) {
-#   x <- convert1[[i]]
-#   n <- grep(paste0("^", x, "$"), Syn_organized$B.word_dif)
-#   if(is_empty(n)) {
-#     vazio <- c(vazio, i)
-#     w <- x
-#     } else {
-#     z <- paste(Syn_organized$Syn_easy[n], collapse = " / ")
-#     w <- paste(x, " (", z, ")", sep = "")
-#     convert2[i] <- w
-#   }
-# }
-# rm("w", "x", "z", "n", "i")
-# # convert2
-#
-# print("Checando sinônimos dos lemmas")
-# #vazio1 <- c()
-# for(i in vazio) {
-#   x <- our_lemmatizer2(convert2[i], lemmasDF.2.1)[[1]]
-#   n <- grep(paste0("^",x, "$"), Syn_organized$B.word_dif)
-#   if(is_empty(n)) {
-#     #vazio1 <- c(vazio1, i)
-#     w <- x
-#   } else {
-#     z <- paste(Syn_organized$Syn_easy[n], collapse = " / ")
-#     w <- paste(convert2[i], " (", z, ")", sep = "")
-#     convert2[[i]] <- w
-#   }
-# }
-# rm("w", "x", "z", "n", "i")
-#
-#
-# print("recriando a pontuação")
-# final <- rep(NA, length(convert))
-# p <- 1
-# c <- 1
-# for(i in 1:length(final)) {
-#   if(posit_pontuacao[i] == T) {
-#     final[i] <- pontuacao[p]
-#     p <- p+1
-#   } else {
-#     final[i] <- convert2[c]
-#     c <- c+1
-#   }
-# }
-# rm("p", "c", "i")
-#
-#
-# Legendas_selec
-# paste(convert, collapse = "", sep = "")
-# convert
-# paste(final, collapse = "", sep = "")
+
+synonym_suggest <- function(text) {
+  convert <- our_tokenizer(text)
+
+  # separo os elementos com pontuação
+  convert1 <- convert[!grepl(" |\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:|<|>", convert)] # nao remover nem - nem ' nem ’
+  pontuacao <- convert[grepl(" |\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:|<|>", convert)]
+  posit_pontuacao <- grepl(" |\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:|<|>", convert) #
+  posit_NA <- is.na(convert1)
+  convert1 <- convert1[!is.na(convert1)]
+
+
+
+  convert2 <- convert1
+  vazio <- c()
+  print("Checando sinônimos")
+  for(i in 1:length(convert1)) {
+    x <- convert1[[i]]
+    n <- grep(paste0("^", x, "$"), Syn_organized$B.word_dif)
+    if(is_empty(n)) {
+      vazio <- c(vazio, i)
+      w <- x
+      } else {
+      z <- paste(Syn_organized$Syn_easy[n], collapse = " / ")
+      w <- paste(x, " (", z, ")", sep = "")
+      convert2[i] <- w
+    }
+  }
+  # rm("w", "x", "z", "n", "i")
+  # convert2
+
+  # print("Checando sinônimos dos lemmas")
+  #vazio1 <- c()
+  for(i in vazio) {
+    x <- our_lemmatizer2(convert2[i], lemmasDF.2.1, return = "first")[[1]]
+    n <- grep(paste0("^",x, "$"), Syn_organized$B.word_dif)
+    if(is_empty(n)) {
+      #vazio1 <- c(vazio1, i)
+      w <- x
+    } else {
+      z <- paste(Syn_organized$Syn_easy[n], collapse = " / ")
+      w <- paste(convert2[i], " (", z, ")", sep = "")
+      convert2[[i]] <- w
+    }
+  }
+  # rm("w", "x", "z", "n", "i")
+
+
+  # print("recriando a pontuação")
+  final <- rep(NA, length(convert))
+  p <- 1
+  c <- 1
+  for(i in 1:length(final)) {
+    if(posit_pontuacao[i] == T) {
+      final[i] <- pontuacao[p]
+      p <- p+1
+    } else {
+      final[i] <- convert2[c]
+      c <- c+1
+    }
+  }
+  # rm("p", "c", "i")
+
+
+  # Legendas_selec
+  # paste(convert, collapse = "", sep = "")
+  # convert
+  sinonimos <- paste(final, collapse = "", sep = "")
+  return(sinonimos)
+}
+
 
 ############## ----
 
@@ -106,7 +111,7 @@
 
 
 ##################################
-### (2) testando e executando o exercicio de Antonimos
+### (2) Criando função que executa as sugestões de Antonimos
 
 
 # example <- "https://www.youtube.com/watch?v=4GsjEPRMzdw" # easy
@@ -135,100 +140,74 @@
 # testdata_Level <- testdata_Level
 # convert <- testdata_Level
 #
-# # separo os elementos com pontuação
-# convert1 <- convert[!grepl(" |\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:|<|>", convert)] # nao remover nem - nem ' nem ’
-# pontuacao <- convert[grepl(" |\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:|<|>", convert)]
-# posit_pontuacao <- grepl(" |\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:|<|>", convert) #
-# posit_NA <- is.na(convert1)
-# convert1 <- convert1[!is.na(convert1)]
-#
-#
-#
-# convert2 <- convert1
-# vazio <- c()
-# print("Checando sinônimos")
-# for(i in 1:length(convert1)) {
-#   x <- convert1[[i]]
-#   n <- grep(paste0("^", x, "$"), Ant_organized$B.word_dif)
-#   if(is_empty(n)) {
-#     vazio <- c(vazio, i)
-#     w <- x
-#     } else {
-#     z <- paste(Ant_organized$Ant_easy[n], collapse = " / ")
-#     w <- paste(x, " (", z, ")", sep = "")
-#     convert2[i] <- w
-#   }
-# }
-# rm("w", "x", "z", "n", "i")
-# # convert2
-#
-# print("Checando sinônimos dos lemmas")
-# #vazio1 <- c()
-# for(i in vazio) {
-#   x <- our_lemmatizer2(convert2[i], lemmasDF.2.2)[[1]]
-#   n <- grep(paste0("^",x, "$"), Ant_organized$B.word_dif)
-#   if(is_empty(n)) {
-#     #vazio1 <- c(vazio1, i)
-#     w <- x
-#   } else {
-#     z <- paste(Ant_organized$Ant_easy[n], collapse = " / ")
-#     w <- paste(convert2[i], " (", z, ")", sep = "")
-#     convert2[[i]] <- w
-#   }
-# }
-# rm("w", "x", "z", "n", "i")
-#
-#
-# print("recriando a pontuação")
-# final <- rep(NA, length(convert))
-# p <- 1
-# c <- 1
-# for(i in 1:length(final)) {
-#   if(posit_pontuacao[i] == T) {
-#     final[i] <- pontuacao[p]
-#     p <- p+1
-#   } else {
-#     final[i] <- convert2[c]
-#     c <- c+1
-#   }
-# }
-# rm("p", "c", "i")
-#
-#
-# Legendas_selec
-# paste(convert, collapse = "", sep = "")
-# convert
-# paste(final, collapse = "", sep = "")
+
+antonym_suggest <- function(text) {
+  convert <- our_tokenizer(text)
+  # separo os elementos com pontuação
+  convert1 <- convert[!grepl(" |\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:|<|>", convert)] # nao remover nem - nem ' nem ’
+  pontuacao <- convert[grepl(" |\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:|<|>", convert)]
+  posit_pontuacao <- grepl(" |\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:|<|>", convert) #
+  posit_NA <- is.na(convert1)
+  convert1 <- convert1[!is.na(convert1)]
 
 
+  convert2 <- convert1
+  vazio <- c()
+  print("Checando antônimos")
+  for(i in 1:length(convert1)) {
+    x <- convert1[[i]]
+    n <- grep(paste0("^", x, "$"), Ant_organized$B.word_dif)
+    if(is_empty(n)) {
+      vazio <- c(vazio, i)
+      w <- x
+      } else {
+      z <- paste(Ant_organized$Ant_easy[n], collapse = " / ")
+      w <- paste(x, " (", z, ")", sep = "")
+      convert2[i] <- w
+    }
+  }
+  # rm("w", "x", "z", "n", "i")
+  # convert2
+
+  # print("Checando antônimos dos lemmas")
+  #vazio1 <- c()
+  for(i in vazio) {
+  x <- our_lemmatizer2(convert2[i], lemmasDF.2.2, return = "first")[[1]]
+    n <- grep(paste0("^",x, "$"), Ant_organized$B.word_dif)
+    if(is_empty(n)) {
+      #vazio1 <- c(vazio1, i)
+      w <- x
+    } else {
+      z <- paste(Ant_organized$Ant_easy[n], collapse = " / ")
+      w <- paste(convert2[i], " (", z, ")", sep = "")
+      convert2[[i]] <- w
+    }
+  }
+  # rm("w", "x", "z", "n", "i")
 
 
+  # print("recriando a pontuação")
+  final <- rep(NA, length(convert))
+  p <- 1
+  c <- 1
+  for(i in 1:length(final)) {
+    if(posit_pontuacao[i] == T) {
+      final[i] <- pontuacao[p]
+      p <- p+1
+    } else {
+      final[i] <- convert2[c]
+      c <- c+1
+    }
+  }
+  # rm("p", "c", "i")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  # Legendas_selec
+  # paste(convert, collapse = "", sep = "")
+  # convert
+  antonimos <- paste(final, collapse = "", sep = "")
+  return(antonimos)
+}
 
 
 

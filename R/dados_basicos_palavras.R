@@ -23,39 +23,35 @@
 #' @param stemm é lógico, default=F, transforma as palavras em stemms (pacote tm)
 #' @param unicas é lógico, default=T, retorna o vetor sem palavras repetidas
 palavras_legenda <- function(Insira_Link_do_Video_aqui,
-                             language="en",
-                             removestopwords=TRUE,
-                             stemm=FALSE,
-                             unicas=TRUE) {
-# limpando, stemming e convertendo para o formato adequado
+                              language="en",
+                              removestopwords=TRUE,
+                              stemm=FALSE,
+                              unicas=TRUE) {
+  # limpando, stemming e convertendo para o formato adequado
 
   Legendas <- youtubecaption::get_caption(url = Insira_Link_do_Video_aqui,
-                          # Insira_Link_do_Video_aqui <- "https://www.youtube.com/watch?v=R7YmA_-8zZo"
-                          language = language,  # ATENCAO PARA A ESCOLHA DA LEGENDA
-                          savexl = FALSE, openxl = FALSE, path = getwd())
+                                          # Insira_Link_do_Video_aqui <- "https://www.youtube.com/watch?v=R7YmA_-8zZo"
+                                          language = language,  # ATENCAO PARA A ESCOLHA DA LEGENDA
+                                          savexl = FALSE, openxl = FALSE, path = getwd())
 
-  ## B2. limpando, stemming e convertendo as legendas para o formato adequado
-  Legendas_string <- pull(Legendas, text) # converte o tibble em vetor
-  Legendas_corpus <- Corpus(VectorSource(Legendas_string)) # converte os vetores em corpus
-  Legendas_corpus_limpo <- tm_map(Legendas_corpus, tolower)
+  Legendas_string <- Legendas$text
+  Legendas_string <- str_to_lower(Legendas_string)
+  Legendas_string <- gsub("\\n", " ", Legendas_string)
+  words <- our_tokenizer(Legendas_string)
+
   if (removestopwords == TRUE) {
-    Legendas_corpus_limpo <- tm_map(Legendas_corpus_limpo, removeWords, stopwords("english")) # Limpando as stopwords
+    words <- removeWords(words, tm::stopwords(kind = "en")) # Limpando as stopwords
   }
-  Legendas_corpus_limpo <- tm_map(Legendas_corpus_limpo, removeNumbers)
-  Legendas_corpus_limpo <- tm_map(Legendas_corpus_limpo, stripWhitespace)
+
   if (stemm == TRUE) {
-    Legendas_corpus_limpo <- tm_map(Legendas_corpus_limpo, stemDocument, language = "english")
+    words <- stemDocument(words, language = "english")
   }
-  # inspect(Legendas_corpus_limpo[1])
-
-  a <- as.data.frame(Legendas_corpus_limpo)
-
-  palavras <- our_tokenizer(a$text)
 
   if (unicas == TRUE) {
-    palavras <- unique(palavras)
+    words <- unique(words)
   }
-  return(palavras)
+
+  return(words)
 }
 
 
@@ -248,39 +244,88 @@ palavras_legenda <- function(Insira_Link_do_Video_aqui,
 #' @param language é um string indicando qual o idioma da legenda, o valor
 #' default é "en". Para entender quais os possiveis strings de 'y', ver o
 #' parametro language da função get_caption() do pacote "youtubecaption"
-#' @param stemm é lógico, default=F, transforma as palavras em stemms (pacote tm)
 #' @param qntt é quantidade de palavras mais frequentes que desejamos ver exibidas em barras
 #'
 palavras_frequentes <- function(Insira_Link_do_Video_aqui,
                                 language ="en",
-                                stemm=FALSE,
-                                qntt=40) {
+                                qntt=30) {
 
-  vector <- palavras_legenda(Insira_Link_do_Video_aqui, languag="en",
+  require(ggalt)
+  require(tidyquant)
+
+
+  vector0 <- palavras_legenda(Insira_Link_do_Video_aqui, languag="en", # otimo exemplo: "https://www.youtube.com/watch?v=j5v8D-alAKE"
                              removestopwords=TRUE,
-                             stemm=stemm,
+                             stemm=FALSE,
                              unicas=FALSE)
 
-  df <- data.frame(table(vector))
 
-  df_M1 <- df %>% filter(df$Freq > 1) # selecionando os termos q aparecem mais de 1 vez
+  # criando a quantidade de palavras no original
+  vector <- our_tokenizer(vector0)
+  vector <- vector[!grepl("[0-9]", vector)]
+  vector <- vector[!grepl(c(" |:|,"), vector)]
+  vector <- vector[!grepl("\\;|\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:|\\\\", vector)]
+  vector <- vector[!grepl(" ", vector)]
+  # vector <- vector[!grepl("^-", vector)]
+  vector <- vector[!grepl("\"", vector)]
+  # N <- c()                             # acho que não precisa mais, pq toquenizei na primeira linha
+  # for(i in 1:length(vector)) {
+  #   if(vector[i] == "") {
+  #     N <- c(N,i)
+  #   }
+  # }
+  # vector <- vector[-N]
 
-  x <- grep(c(" |:|,"), df_M1$vector)
+  vector1 <- data.frame(words=vector)
+  vector1 <- vector1 %>%
+    group_by(words) %>%
+    mutate(count_orig. = n())
+  vector1 <- vector1[!grepl("^-$", vector1$words),]
+  vector1 <- vector1[!grepl("^;$", vector1$words),]
 
-  df_M1 <- df_M1[-x,]
+  # criando a quantidade de palavras lemmatizadas
+  vector_lem <- our_lemmatizer3(vector0, return = "first")
+  vector_lem <- our_tokenizer(vector_lem)
+  vector_lem <- vector_lem[!grepl("[0-9]", vector_lem)]
+  vector_lem <- vector_lem[!grepl(c(" |:|,"), vector_lem)]
+  vector_lem <- vector_lem[!grepl("\\;|\\,|\\.|\\?|\\!|\\%|\\(|\\)|\\]|\\[|\\:|\\\\", vector_lem)]
+  vector_lem <- vector_lem[!grepl(" ", vector_lem)]
+  # vector_lem <- vector_lem[!grepl("^-", vector_lem)]
+  vector_lem <- vector_lem[!grepl("\"", vector_lem)]
 
-  ordem <- order(df_M1$Freq, decreasing = FALSE) # obter a ordenacao do volume
+  vector1_lem <- data.frame(words=vector_lem)
+  vector1_lem <- vector1_lem %>%
+    group_by(words) %>%
+    mutate(count_lemmat. = n())
+  vector1_lem <- vector1_lem[!grepl("^-$", vector1_lem$words),]
+  vector1_lem <- vector1_lem[!grepl("^;$", vector1_lem$words),]
 
-  levels <- df_M1$vector[ordem]  # criar os n?veis ordenados
-  df_M1$vector <- factor(df_M1$vector, levels=levels, ordered=TRUE) # criar um factor com n?veis ordenados
 
-  df_M1 <- df_M1[order(df_M1$Freq, decreasing = TRUE),]
-  df_M1 <- df_M1[1:qntt,]
+  # reunindo as contagens e adicionando a diferença
+  df0 <- cbind(vector1, vector1_lem)
+  df <- unique(df0)
+  colnames(df) <- c("orig.", "count_orig.", "lemma.", "count_lemmat.")
+  df <- df %>% mutate(diff = count_lemmat.- count_orig.)
 
-  graf <- ggplot(data = df_M1) + aes(x = df_M1$vector, y = df_M1$Freq) + #para add cores: "fill = word" como argumento em aes()
-    geom_bar(stat = "identity") + labs(x = "Palavras", y = 'Frequencia') +
-    guides(fill=FALSE) +
-    coord_flip()
+
+  # df <- df[order(-df$count_lemmat., -df$diff), ] # ordenando por 2 colunas
+  df <- df[order(-df$count_orig.), ]
+
+  df <- df[1:qntt,]  # extraindo apenas o mais importante
+  print(df)
+
+
+  graf <- ggplot(df, aes(x=count_orig., xend = count_lemmat., y = reorder(lemma., count_lemmat.) )) +
+    geom_dumbbell(colour = "#a3c4dc",
+                  colour_xend="#0e668b",
+                  size=2.0,
+                  dot_guide=T,
+                  dot_guide_size=0.15,
+                  dot_guide_colour="grey60"
+    ) +
+    labs(x = "n. most common original -> n. lemmatized words", y=" Lemmatized word") +
+    scale_x_continuous(breaks=seq(from=min(df$count_orig.), to=max(df$count_lemmat.), by=2))
+
 
   return(graf)
 }
@@ -295,13 +340,25 @@ palavras_frequentes <- function(Insira_Link_do_Video_aqui,
 
 ## RETORNO GRAFICO DE DISPERSÃO DE PALAVRAS DESEJADAS
 
-# função que recebe o vetor de palavras (legenda) e o vetor de palavras desejadas
-# e retorna a dispersao das palavras desejadas no vetor da legenda:
-dispers <- function(p,# é o vetor de palavras gerado por palavras_legenda()
+
+#' dispers()
+#'
+#' função que recebe o vetor de palavras (legenda) e o vetor de palavras desejadas
+#' e retorna a dispersao das palavras desejadas no vetor da legenda:
+#' AINDA e' preciso conferir melhor se esta funcionando otratamento para nao encontrar palavras como substrings
+#' E eu ja tentei usar ^ $ nos vetores de palavras mas nao funcionou
+#' @param p é o vetor de palavras gerado por palavras_legenda( ,unicas=F)
+#' @param desejadas e' a lista de palavras que se deseja ver como: LCtestcontentR::bodyparts
+#'
+dispers <- function(p,# é o vetor de palavras gerado por palavras_legenda( ,unicas=F)
                     desejadas #e' a lista de palavras que se deseja ver como: LCtestcontentR::bodyparts
 ) {
-  # ATENCAO é preciso transformar as desejadas, colocando ^ e $..., pois do jeito que está ele procura os substrings
-  graf <- with(data.frame(p), qdap::dispersion_plot(p, desejadas,
+  p <- paste(p, collapse = " ")
+  desej <- c()
+  for(i in 1:length(desejadas)) {
+    desej <- c(desej, paste0(" ", desejadas[i], " "))
+  }
+  graf <- with(data.frame(p), qdap::dispersion_plot(p, desej,
                                                     bg.color = "gray",  # cor do fundo,
                                                     color = "blue",
                                                     total.color = "white", # cor da dispers?o na linha de todas as palavras
